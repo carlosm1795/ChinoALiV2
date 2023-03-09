@@ -29,13 +29,14 @@ import NProgress from 'nprogress'
 import { ThemeColor } from 'src/@core/layouts/types'
 import useApi from 'src/@core/hooks/useApi'
 import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from '../../Types/Types'
+import { ConvertUSTOCRTime } from 'src/@core/lib/GeneralUtils'
 
 const ProfileCard = () => {
   //state
   const dispatch = useDispatch()
   const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
   const state = useSelector((state: State) => state)
-  const [stateRegistroAntropometrico, setDatoRegistroAntropometrico] = useState<RegistroAntropometria>({
+  const [datoRegistroAntropometrico, setDatoRegistroAntropometrico] = useState<RegistroAntropometria>({
     _id: '',
     FechaMedicion: new Date(),
     Usuario: '',
@@ -103,8 +104,7 @@ const ProfileCard = () => {
     }
   }, [GetProfileInformation.isLoading])
 
-  const CalculateAge = (birth: string | null) => {
-    console.log(birth)
+  const CalculateAge = (birth: string | undefined) => {    
     let result = ''
     if (birth) {
       var dob = new Date(birth)
@@ -145,34 +145,42 @@ const ProfileCard = () => {
         return <Numeric sx={{ fontSize: '1.75rem' }} />
     }
   }
-  const renderStats = (datos: RegistroAntropometria) => {
-    console.log(datos)
-    return datos.Values.map((item: RegistroAntropometriaValues, index: number) => (
-      <Grid item xs={12} sm={3} key={index}>
-        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar
-            variant='rounded'
-            sx={{
-              mr: 3,
-              width: 44,
-              height: 44,
-              boxShadow: 3,
-              color: 'common.white',
-              backgroundColor: `primary.main`
-            }}
-          >
-            {GetIcon(item.dato)}
-          </Avatar>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant='caption'>{item.dato}</Typography>
-            <Typography variant='h6'>
-              {item.value}
-              {item.unidades}
-            </Typography>
+  const renderStats = (datos: RegistroAntropometria) => {    
+    if(datos){
+
+      return datos.Values.map((item: RegistroAntropometriaValues, index: number) => (
+        <Grid item xs={12} sm={3} key={index}>
+          <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              variant='rounded'
+              sx={{
+                mr: 3,
+                width: 44,
+                height: 44,
+                boxShadow: 3,
+                color: 'common.white',
+                backgroundColor: `primary.main`
+              }}
+            >
+              {GetIcon(item.dato)}
+            </Avatar>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant='caption'>{item.dato}</Typography>
+              <Typography variant='h6'>
+                {item.value}
+                {item.unidades}
+              </Typography>
+            </Box>            
           </Box>
-        </Box>
-      </Grid>
-    ))
+        </Grid>
+      ))
+    }else{
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant='caption'>Usuario sin registros</Typography>              
+            </Box>
+      )
+    }
   }
   return (
     <>
@@ -194,14 +202,17 @@ const ProfileCard = () => {
                   </Box>
                 </Typography>
                 <Typography variant='body2'>
-                  <Box sx={{ fontWeight: 600, color: 'text.primary' }}>{CalculateAge(usuario.FechaNacimiento)}</Box>
+                  <Box sx={{ fontWeight: 600, color: 'text.primary' }}>{CalculateAge(usuario.FechaNacimiento?.toString())}</Box>
                 </Typography>
+                {
+                  datoRegistroAntropometrico?.FechaMedicion ? ConvertUSTOCRTime(datoRegistroAntropometrico.FechaMedicion.toString()) : null
+                }                                          
               </>
             }
           />
           <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
             <Grid container spacing={[5, 0]}>
-              {renderStats(stateRegistroAntropometrico)}
+              {renderStats(datoRegistroAntropometrico)}
             </Grid>
           </CardContent>
         </Card>
