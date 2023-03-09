@@ -1,7 +1,6 @@
 // ** React Imports
 import { ReactElement, useEffect, useState } from 'react'
 
-
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -18,6 +17,7 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+import { HumanMaleHeightVariant,Weight,ArmFlex,TapeMeasure,Numeric } from 'mdi-material-ui'
 
 //** State Imports */
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,7 +28,7 @@ import NProgress from 'nprogress'
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
 import useApi from 'src/@core/hooks/useApi'
-import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from "../../Types/Types"
+import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from '../../Types/Types'
 
 const ProfileCard = () => {
   //state
@@ -69,7 +69,7 @@ const ProfileCard = () => {
 
   useEffect(() => {
     if (state.ChangeOnUser !== '') {
-      GetProfileInformation.setParameters((info:any) => ({
+      GetProfileInformation.setParameters((info: any) => ({
         ...info,
         data: {
           idUser: state.ChangeOnUser
@@ -77,7 +77,7 @@ const ProfileCard = () => {
       }))
       GetProfileInformation.setFire(true)
 
-      GetLatestRegistroAntropometrico.setParameters((info:any) => ({
+      GetLatestRegistroAntropometrico.setParameters((info: any) => ({
         ...info,
         data: {
           idUser: state.ChangeOnUser
@@ -91,7 +91,7 @@ const ProfileCard = () => {
 
   useEffect(() => {
     if (GetLatestRegistroAntropometrico.dataReady) {
-      NProgress.done()      
+      NProgress.done()
       setDatoRegistroAntropometrico(GetLatestRegistroAntropometrico.data[0])
     }
   }, [GetLatestRegistroAntropometrico.isLoading])
@@ -117,12 +117,32 @@ const ProfileCard = () => {
     return result
   }
 
-  const GetIcon = (value:string) => {
-    switch (value){
-        case "Peso Actual":
-            return <AccountOutline sx={{ fontSize: '1.75rem' }} />
-        default:
-            return <AccountOutline sx={{ fontSize: '1.75rem' }} />
+  const GetIcon = (value: string) => {
+    switch (value) {
+      case 'Talla':
+        return <HumanMaleHeightVariant sx={{ fontSize: '1.75rem' }} />
+      case 'Peso Actual':
+        return <Weight sx={{ fontSize: '1.75rem' }} />
+      case 'IMC':
+        return <ArmFlex sx={{ fontSize: '1.75rem' }} />
+      case 'Cintura':
+        return <TapeMeasure sx={{ fontSize: '1.75rem' }} />
+      case 'Cadera':
+        return <TapeMeasure sx={{ fontSize: '1.75rem' }} />
+      case 'Muneca':
+        return <TapeMeasure sx={{ fontSize: '1.75rem' }} />
+      case 'Constitucion Corporal':
+        return <ArmFlex sx={{ fontSize: '1.75rem' }} />
+      case 'Peso Ideal':
+        return <Weight sx={{ fontSize: '1.75rem' }} />
+      case '% Peso para la talla':
+        return <HumanMaleHeightVariant sx={{ fontSize: '1.75rem' }} />
+      case 'Peso Ajustado':
+        return <Weight sx={{ fontSize: '1.75rem' }} />
+        case 'Peso Meta':
+          return <Weight sx={{ fontSize: '1.75rem' }} />
+      default:
+        return <Numeric sx={{ fontSize: '1.75rem' }} />
     }
   }
   const renderStats = (datos: RegistroAntropometria) => {
@@ -140,10 +160,8 @@ const ProfileCard = () => {
               color: 'common.white',
               backgroundColor: `primary.main`
             }}
-          >            
-            {
-                GetIcon(item.dato)
-            }
+          >
+            {GetIcon(item.dato)}
           </Avatar>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant='caption'>{item.dato}</Typography>
@@ -164,30 +182,30 @@ const ProfileCard = () => {
         </Card>
       ) : null}
 
-      {usuario.Nombre.length > 0 ? 
+      {usuario.Nombre.length > 0 ? (
         <Card>
-        <CardHeader
-          title={`${usuario.Nombre} ${usuario.Apellido}`}
-          subheader={
-            <>
-              <Typography variant='body2'>
-                <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                  {`email:${usuario.Email}`}
-                </Box>
-              </Typography>
-              <Typography variant='body2'>
-                <Box sx={{ fontWeight: 600, color: 'text.primary' }}>{CalculateAge(usuario.FechaNacimiento)}</Box>
-              </Typography>
-            </>
-          }
-        />
-        <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
-          <Grid container spacing={[5, 0]}>
-            {renderStats(stateRegistroAntropometrico)}
-          </Grid>
-        </CardContent>
-      </Card> : null
-        }
+          <CardHeader
+            title={`${usuario.Nombre} ${usuario.Apellido}`}
+            subheader={
+              <>
+                <Typography variant='body2'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    {`email:${usuario.Email}`}
+                  </Box>
+                </Typography>
+                <Typography variant='body2'>
+                  <Box sx={{ fontWeight: 600, color: 'text.primary' }}>{CalculateAge(usuario.FechaNacimiento)}</Box>
+                </Typography>
+              </>
+            }
+          />
+          <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
+            <Grid container spacing={[5, 0]}>
+              {renderStats(stateRegistroAntropometrico)}
+            </Grid>
+          </CardContent>
+        </Card>
+      ) : null}
     </>
   )
 }
