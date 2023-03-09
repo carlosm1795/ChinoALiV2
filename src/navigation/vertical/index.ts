@@ -21,12 +21,24 @@ const navigation = (): VerticalNavItemsType => {
       path: '/'
     },
     {
+      title: 'Dashboard',
+      icon: HomeOutline,
+      path: '/dashboardUsers',
+      openInNewTab: false
+    },
+    {
       title: 'Account Settings',
       icon: AccountCogOutline,
       path: '/account-settings'
     },
     {
       sectionTitle: 'Pages'
+    },
+    {
+      title: 'Agregar Usuarios',
+      icon: AccountPlusOutline,
+      path: '/addUser',
+      openInNewTab: false
     },
     {
       title: 'Login',

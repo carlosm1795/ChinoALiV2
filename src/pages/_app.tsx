@@ -1,3 +1,5 @@
+import { Provider } from 'react-redux'
+import {store} from "../@core/state/store"
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
@@ -59,6 +61,7 @@ const App = (props: ExtendedAppProps) => {
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
+    <Provider store={store}>
     <CacheProvider value={emotionCache}>
       <Head>
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
@@ -78,6 +81,7 @@ const App = (props: ExtendedAppProps) => {
         </SettingsConsumer>
       </SettingsProvider>
     </CacheProvider>
+    </Provider>
   )
 }
 
