@@ -1,3 +1,8 @@
+import { useState, useEffect } from 'react'
+//** State Imports */
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionCreators,State } from 'src/@core/state'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material/styles'
@@ -18,6 +23,10 @@ import ModeToggler from 'src/@core/layouts/components/shared-components/ModeTogg
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 
+import { SelectOptions,Usuario } from 'src/Types/Types'
+import Select, { SingleValue } from 'react-select'
+import useApi from 'src/@core/hooks/useApi'
+
 interface Props {
   hidden: boolean
   settings: Settings
@@ -32,51 +41,90 @@ const AppBarContent = (props: Props) => {
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
+  //state
+  const [usuarios, setUsuarios] = useState<Array<SelectOptions>>([])
+  const dispatch = useDispatch()
+  const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
+  const state = useSelector((state: State) => state)
+
+  const GetUsuariosCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/getUser',
+      method: 'GET'
+    },
+    shouldFire: true
+  })
+
+  const UpdateUserSelection = (user: SingleValue<SelectOptions>) => {    
+    if(user?.value){
+
+      ChangeOnUser(user?.value)
+    }else{
+      ChangeOnUser("")
+    }
+  }
+
+  useEffect(() => {
+    if (GetUsuariosCall.dataReady) {
+      let options = GetUsuariosCall.data.map((usuario: Usuario) => ({
+        label: `${usuario.Nombre} ${usuario.Apellido}`,
+        value: usuario._id
+      }))
+      setUsuarios(options)
+    }
+  }, [GetUsuariosCall.isLoading])
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-        {hidden ? (
-          <IconButton
-            color='inherit'
-            onClick={toggleNavVisibility}
-            sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
-          >
-            <Menu />
-          </IconButton>
-        ) : null}
-        <TextField
-          size='small'
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <Magnify fontSize='small' />
-              </InputAdornment>
-            )
-          }}
-        />
-      </Box>
-      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-        {hiddenSm ? null : (
-          <Box
-            component='a'
-            target='_blank'
-            rel='noreferrer'
-            sx={{ mr: 4, display: 'flex' }}
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free'
-          >
-            <img
-              height={24}
-              alt='github stars'
-              src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
-            />
-          </Box>
-        )}
-        <ModeToggler settings={settings} saveSettings={saveSettings} />
-        <NotificationDropdown />
-        <UserDropdown />
-      </Box>
+    <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+      {hidden ? (
+        <IconButton
+          color='inherit'
+          onClick={toggleNavVisibility}
+          sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
+        >
+          <Menu />
+        </IconButton>
+      ) : null}
+      <TextField
+        size='small'
+        sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position='start'>
+              <Magnify fontSize='small' />
+            </InputAdornment>
+          )
+        }}
+      />
+      <Select
+        placeholder='Personas'
+        className='basic-single'
+        options={usuarios}
+        isClearable
+        onChange={e => UpdateUserSelection(e)}
+      />
     </Box>
+    <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+      {hiddenSm ? null : (
+        <Box
+          component='a'
+          target='_blank'
+          rel='noreferrer'
+          sx={{ mr: 4, display: 'flex' }}
+          href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free'
+        >
+          <img
+            height={24}
+            alt='github stars'
+            src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
+          />
+        </Box>
+      )}
+      <ModeToggler settings={settings} saveSettings={saveSettings} />
+      <NotificationDropdown />
+      <UserDropdown />
+    </Box>
+  </Box>
   )
 }
 

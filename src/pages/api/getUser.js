@@ -1,6 +1,6 @@
 
-import clientPromise from "../../../lib/mongodb";
-import {MONGODB_DB_NAME,MONGODB_DB_USUARIOSCOLLECTION} from "../../../lib/settings"
+import clientPromise from "../../@core/lib/mongodb";
+import {MONGODB_DB_NAME,MONGODB_DB_USUARIOSCOLLECTION} from "../../@core/lib/settings"
 export default async (req, res) => {
   try {
     const client = await clientPromise;    
