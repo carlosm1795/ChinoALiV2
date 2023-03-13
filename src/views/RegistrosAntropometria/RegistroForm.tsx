@@ -1,38 +1,74 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // ** React Imports
-import { useState, ElementType, ChangeEvent, SyntheticEvent, forwardRef } from 'react'
+import { useState, forwardRef } from 'react'
+import NProgress from 'nprogress'
+import cogoToast from 'cogo-toast'
+
+//** State Imports */
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionCreators, State } from 'src/@core/state'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import Alert from '@mui/material/Alert'
-import Select from '@mui/material/Select'
-import { styled } from '@mui/material/styles'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
-import AlertTitle from '@mui/material/AlertTitle'
-import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import Button, { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import DatePicker from 'react-datepicker'
-
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import useApi from 'src/@core/hooks/useApi'
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
 import { RegistroAntropometria } from 'src/Types/Types'
+import { ButtonGroup } from '@mui/material'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Fecha de Medicion' autoComplete='off' />
 })
 
 const RegistroForm = () => {
+  const dispatch = useDispatch()
+  const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
+  const state = useSelector((state: State) => state)
+  const [dateRegistroAntro, setDateRegistroAntro] = useState<Array<RegistroAntropometria>>([])
+  const InsertCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/addRegistroAntropometria',
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const UpdateCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/updateRegistroAntropometria',
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const DeleteCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/deleteRegistroAntropometria',
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const GetDateRegistrosCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/GetDateRegistrosAntropometricos',
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
   const [formValue, setFormValue] = useState<RegistroAntropometria>({
     _id: '',
     FechaMedicion: new Date(),
@@ -117,7 +153,7 @@ const RegistroForm = () => {
   })
 
   const GetActualValue = (id: String) => {
-    let result = formValue.Values.find(key => key.dato === id)    
+    let result = formValue.Values.find(key => key.dato === id)
     if (result) {
       return result.value
     }
@@ -126,7 +162,7 @@ const RegistroForm = () => {
 
   const getActualUnidad = (id: String) => {
     let result = formValue.Values.find(key => key.dato === id)
-    if (result) {      
+    if (result) {
       return result.unidades
     }
     return ''
@@ -157,17 +193,209 @@ const RegistroForm = () => {
     }
   }
 
-  const HandleChangeDate = (date:Date|null) => {
-    if(date){
-        setFormValue((info) => ({
-            ...info,
-            FechaMedicion:date
-        }))
+  const HandleChangeDate = (date: Date | null) => {
+    if (date) {
+      setFormValue(info => ({
+        ...info,
+        FechaMedicion: date
+      }))
     }
   }
+
+  const Execute = () => {
+    if (formValue._id === '') {
+      InsertCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          ...formValue,
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      InsertCall.setFire(true)
+    } else {
+      UpdateCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          ...formValue,
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      UpdateCall.setFire(true)
+    }
+  }
+
+  const Delete = () => {
+    DeleteCall.setParameters((info: any) => ({
+      ...info,
+      data: {
+        _id: formValue._id
+      }
+    }))
+    DeleteCall.setFire(true)
+    ResetForm()
+    NProgress.start()
+  }
+
+  const ResetForm = () => {
+    setFormValue({
+      _id: '',
+      FechaMedicion: new Date(),
+      Usuario: '',
+      Values: [
+        {
+          dato: 'Peso Actual',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Talla',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'IMC',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Cintura',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Cadera',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Muneca',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Constitucion Corporal',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Peso Ideal',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: '% Peso para la talla',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Peso Ajustado',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Peso Meta',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: '% Grasa Corporal',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: '% Grasa Visceral',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: '% Musculo',
+          value: 0,
+          unidades: ''
+        },
+        {
+          dato: 'Edad Metabólica',
+          value: 0,
+          unidades: ''
+        }
+      ]
+    })
+  }
+
+  const HandleChangeSelect = (e: any) => {
+    let result: any = null
+    if (typeof e.target.value === 'string' || e.target.value !== '') {
+      result = dateRegistroAntro.find(
+        row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(e.target.value).toLocaleDateString()
+      )
+    }
+
+    if (result) {
+      console.log(result)
+      setFormValue({ ...result, FechaMedicion: new Date(result.FechaMedicion) })
+    } else {
+      ResetForm()
+    }
+  }
+  useEffect(() => {
+    if (GetDateRegistrosCall.dataReady) {
+      if (GetDateRegistrosCall.data.length > 0) {
+        setDateRegistroAntro(GetDateRegistrosCall.data)
+      }
+    }
+    NProgress.done()
+  }, [GetDateRegistrosCall.isLoading])
+
+  useEffect(() => {
+    if (InsertCall.dataReady || UpdateCall.dataReady) {
+      cogoToast.success('Dato Registrado', { position: 'top-right' })
+      ResetForm()
+    }
+    NProgress.done()
+  }, [InsertCall.isLoading, UpdateCall.isLoading])
+
+  useEffect(() => {
+    if (state.ChangeOnUser !== '') {
+      GetDateRegistrosCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      GetDateRegistrosCall.setFire(true)
+    }
+  }, [state.ChangeOnUser])
+
+  useEffect(() => {
+    if (DeleteCall.dataReady) {
+      cogoToast.success('Dato Eliminado', { position: 'top-right' })
+      NProgress.done()
+      GetDateRegistrosCall.setFire(true)
+    }
+  }, [DeleteCall.isLoading])
   return (
     <CardContent>
       <Grid container spacing={7}>
+        <Grid item xs={12} sm={12}>
+          <FormControl fullWidth>
+            <InputLabel id='demo-simple-select-label'>Fecha</InputLabel>
+            <Select
+              onChange={e => HandleChangeSelect(e)}
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              label='Age'
+            >
+              <MenuItem value=''>&nbsp;&nbsp;</MenuItem>
+              {dateRegistroAntro.map(registro => (
+                <MenuItem value={new Date(registro.FechaMedicion).toDateString()}>
+                  {new Date(registro.FechaMedicion).toLocaleDateString('es-ES')}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
@@ -212,8 +440,8 @@ const RegistroForm = () => {
             aria-labelledby='demo-row-radio-buttons-group-label'
             name='row-radio-buttons-group'
           >
-            <FormControlLabel value='female' control={<Radio />} label='Kg' />
-            <FormControlLabel value='male' control={<Radio />} label='Lib' />
+            <FormControlLabel value='Kg' control={<Radio />} label='Kg' />
+            <FormControlLabel value='Lib' control={<Radio />} label='Lib' />
           </RadioGroup>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -236,8 +464,8 @@ const RegistroForm = () => {
             aria-labelledby='demo-row-radio-buttons-group-label'
             name='row-radio-buttons-group'
           >
-            <FormControlLabel value='female' control={<Radio />} label='Cm' />
-            <FormControlLabel value='male' control={<Radio />} label='Pulg' />
+            <FormControlLabel value='Cm' control={<Radio />} label='Cm' />
+            <FormControlLabel value='Pulg' control={<Radio />} label='Pulg' />
           </RadioGroup>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -246,7 +474,7 @@ const RegistroForm = () => {
             value={GetActualValue('IMC')}
             fullWidth
             label='IMC'
-            id="IMC"
+            id='IMC'
             placeholder='IMC'
             defaultValue='0'
             type='number'
@@ -261,7 +489,7 @@ const RegistroForm = () => {
             placeholder='Cintura'
             defaultValue='0'
             type='number'
-            id="Cintura"
+            id='Cintura'
           />
         </Grid>
         <Grid item xs={12} sm={2}>
@@ -273,7 +501,7 @@ const RegistroForm = () => {
             placeholder='Cadera'
             defaultValue='0'
             type='number'
-            id="Cadera"
+            id='Cadera'
           />
         </Grid>
         <Grid item xs={12} sm={2}>
@@ -281,7 +509,7 @@ const RegistroForm = () => {
             onChange={HandleChange}
             value={GetActualValue('Muneca')}
             fullWidth
-            id="Muneca"
+            id='Muneca'
             label='Muneca'
             placeholder='Muneca'
             defaultValue='0'
@@ -293,7 +521,7 @@ const RegistroForm = () => {
             onChange={HandleChange}
             value={GetActualValue('Constitucion Corporal')}
             fullWidth
-            id="Constitucion Corporal"
+            id='Constitucion Corporal'
             label='Constitucion Corporal'
             placeholder='Constitucion Corporal'
             defaultValue='0'
@@ -397,9 +625,16 @@ const RegistroForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12}>
-          <Button variant='contained' fullWidth onClick={() => console.log(formValue)}>
-            Registrar
-          </Button>
+          <ButtonGroup fullWidth>
+            <Button variant='contained' fullWidth onClick={Execute}>
+              {formValue._id === '' ? 'Registrar' : 'Actualizar'}
+            </Button>
+            {formValue._id !== '' ? (
+              <Button variant='outlined' fullWidth onClick={Delete}>
+                Eliminar
+              </Button>
+            ) : null}
+          </ButtonGroup>
         </Grid>
       </Grid>
     </CardContent>
