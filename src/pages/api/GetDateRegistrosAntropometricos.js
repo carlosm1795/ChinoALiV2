@@ -8,7 +8,7 @@ export default async (req, res) => {
     const post = await db
       .collection(MONGODB_DB_RegistroAntropometria)
       .find({ Usuario: Usuario }, { _id: 0, FechaMedicion: 1 })
-      .sort({ FechaMedicion: 1 })
+      .sort({ FechaMedicion: -1 })
       .toArray()
 
     res.json(post)

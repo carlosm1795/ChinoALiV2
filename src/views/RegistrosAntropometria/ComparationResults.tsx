@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // ** MUI Imports
 import { Button, Checkbox } from '@mui/material'
 import Paper from '@mui/material/Paper'
@@ -11,6 +11,13 @@ import TableRow, { TableRowProps } from '@mui/material/TableRow'
 import TableCell, { TableCellProps, tableCellClasses } from '@mui/material/TableCell'
 import { RegistroAntropometria, RegistroAntropometriaValues } from 'src/Types/Types'
 import { Grid } from '@mui/material'
+import useApi from 'src/@core/hooks/useApi'
+import NProgress from 'nprogress'
+import cogoToast from 'cogo-toast'
+//** State Imports */
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionCreators, State } from 'src/@core/state'
 
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,76 +41,90 @@ const StyledTableRow = styled(TableRow)<TableRowProps>(({ theme }) => ({
 }))
 
 const ComparationResults = () => {
+  const dispatch = useDispatch()
+  const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
+  const state = useSelector((state: State) => state)
+
   const [checked, setChecked] = useState({
     min: '',
     max: ''
   })
+  const GetDateRegistrosCall = useApi({
+    config: {
+      url: 'http://localhost:3000/api/GetDateRegistrosAntropometricos',
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
   const [bodyRows, setBodyRows] = useState<Array<Array<any>>>([])
-  const APIRESPONSE: Array<RegistroAntropometria> = [
-    {
-      _id: '',
-      FechaMedicion: new Date('01-08-2023'),
-      Usuario: '',
-      Values: [
-        {
-          dato: 'Peso',
-          unidades: 'kg',
-          value: 90
-        },
-        {
-          dato: 'IMC',
-          unidades: '',
-          value: 70
-        }
-      ]
-    },
-    {
-      _id: '',
-      FechaMedicion: new Date('01-08-2022'),
-      Usuario: '',
-      Values: [
-        {
-          dato: 'Peso',
-          unidades: 'kg',
-          value: 91
-        },
-        {
-          dato: 'IMC',
-          unidades: '',
-          value: 71
-        }
-      ]
-    },
-    {
-      _id: '',
-      FechaMedicion: new Date('01-08-2021'),
-      Usuario: '',
-      Values: [
-        {
-          dato: 'Peso',
-          unidades: 'kg',
-          value: 92
-        },
-        {
-          dato: 'IMC',
-          unidades: '',
-          value: 72
-        }
-      ]
-    }
-  ]
+  const [APIRESPONSE, setAPIRESPONSE] = useState<Array<RegistroAntropometria>>([])
+  // const APIRESPONSE: Array<RegistroAntropometria> = [
+  //   {
+  //     _id: '',
+  //     FechaMedicion: new Date('01-08-2023'),
+  //     Usuario: '',
+  //     Values: [
+  //       {
+  //         dato: 'Peso',
+  //         unidades: 'kg',
+  //         value: 90
+  //       },
+  //       {
+  //         dato: 'IMC',
+  //         unidades: '',
+  //         value: 70
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     _id: '',
+  //     FechaMedicion: new Date('01-08-2022'),
+  //     Usuario: '',
+  //     Values: [
+  //       {
+  //         dato: 'Peso',
+  //         unidades: 'kg',
+  //         value: 91
+  //       },
+  //       {
+  //         dato: 'IMC',
+  //         unidades: '',
+  //         value: 71
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     _id: '',
+  //     FechaMedicion: new Date('01-08-2021'),
+  //     Usuario: '',
+  //     Values: [
+  //       {
+  //         dato: 'Peso',
+  //         unidades: 'kg',
+  //         value: 92
+  //       },
+  //       {
+  //         dato: 'IMC',
+  //         unidades: '',
+  //         value: 72
+  //       }
+  //     ]
+  //   }
+  // ]
 
   const Data = [0, 'Peso Actual', '80', '20']
   const Data2 = [0, 'IMC', '80', '20']
 
-  const IAmChecked = (id:string) =>{
-    if(checked.max === id || checked.min === id){
+  const IAmChecked = (id: string) => {
+    console.log(id,checked)
+    if (checked.max === id || checked.min === id) {
       return true
-    }else{
+    } else {
       return false
     }
   }
-  const HandleSelection = (e: React.ChangeEvent<HTMLInputElement>) => {    
+  const HandleSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (checked.max === '' && e.target.checked) {
       setChecked(info => ({
         ...info,
@@ -111,21 +132,21 @@ const ComparationResults = () => {
       }))
     } else if (e.target.checked) {
       //Chang Max To Min
-      let maxDate = new Date(checked.max);
-      let minDate = new Date(checked.min);
+      let maxDate = new Date(checked.max)
+      let minDate = new Date(checked.min)
       let currentDate = new Date(e.target.id)
-      if(maxDate<currentDate){
+      if (maxDate < currentDate) {
         setChecked(info => ({
           ...info,
-          min: maxDate.toDateString(),
-          max:currentDate.toDateString()
+          min: maxDate.toLocaleDateString(),
+          max: currentDate.toLocaleDateString()
         }))
-      }else if(minDate>currentDate || checked.min === ""){
+      } else if (minDate > currentDate || checked.min === '') {
         setChecked(info => ({
           ...info,
-          min: currentDate.toDateString(),          
+          min: currentDate.toLocaleDateString()
         }))
-      }      
+      }
     }
 
     if (e.target.checked === false) {
@@ -171,33 +192,56 @@ const ComparationResults = () => {
   }
 
   const CalculateValues = () => {
-    console.log(checked);
-    let maxValue = APIRESPONSE.findIndex((row) => row.FechaMedicion.toDateString() === new Date(checked.max).toDateString())
-    let minValue = APIRESPONSE.findIndex((row) => row.FechaMedicion.toDateString() === new Date(checked.min).toDateString())
+    console.log(checked)
+    let maxValue = APIRESPONSE.findIndex(
+      row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.max).toLocaleDateString()
+    )
+    let minValue = APIRESPONSE.findIndex(
+      row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.min).toLocaleDateString()
+    )
     console.log(maxValue)
-    console.log(bodyRows[0][maxValue+2])
-    console.log(bodyRows[0][minValue+2])
+    console.log(bodyRows[0][maxValue + 2])
+    console.log(bodyRows[0][minValue + 2])
     let copyBodyRows = [...bodyRows]
 
-    copyBodyRows.forEach((row) => {      
-      if(!isNaN(row[maxValue+2]) && !isNaN(row[minValue+2])){
-
-        row[0] = row[maxValue+2] - row[minValue+2]
-      }else{
-        row[0]=0
+    copyBodyRows.forEach(row => {
+      if (!isNaN(row[maxValue + 2]) && !isNaN(row[minValue + 2])) {
+        row[0] = row[maxValue + 2] - row[minValue + 2]
+      } else {
+        row[0] = 0
       }
     })
-    
-    setBodyRows(copyBodyRows)
 
+    setBodyRows(copyBodyRows)
   }
 
   useEffect(() => {
-    if(bodyRows.length > 0){
-
+    if (bodyRows.length > 0) {
       CalculateValues()
     }
-  },[checked])
+  }, [checked])
+
+  useEffect(() => {
+    if (state.ChangeOnUser !== '') {
+      GetDateRegistrosCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      GetDateRegistrosCall.setFire(true)
+    }
+  }, [state.ChangeOnUser])
+
+  useEffect(() => {
+    if (GetDateRegistrosCall.dataReady) {
+      console.log(GetDateRegistrosCall.data)
+      setAPIRESPONSE(GetDateRegistrosCall.data)
+      NProgress.done()
+      cogoToast.success('Registros Cargados', { position: 'top-right' })
+    }
+  }, [GetDateRegistrosCall.isLoading])
   return (
     <Grid>
       <TableContainer component={Paper}>
@@ -207,9 +251,13 @@ const ComparationResults = () => {
               <StyledTableCell align='right'>Total</StyledTableCell>
               <StyledTableCell align='right'>Dato</StyledTableCell>
               {APIRESPONSE.map(response => (
-                <StyledTableCell align='right' key={response.FechaMedicion.toDateString()}>
-                  <Checkbox checked={IAmChecked(response.FechaMedicion.toDateString())} id={`${response.FechaMedicion.toDateString()}`} onChange={e => HandleSelection(e)} />
-                  {response.FechaMedicion.toDateString()}
+                <StyledTableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
+                  <Checkbox
+                    checked={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString())}
+                    id={`${new Date(response.FechaMedicion).toLocaleDateString()}`}
+                    onChange={e => HandleSelection(e)}
+                  />
+                  {new Date(response.FechaMedicion).toLocaleDateString()}
                 </StyledTableCell>
               ))}
             </TableRow>
@@ -234,5 +282,3 @@ const ComparationResults = () => {
 }
 
 export default ComparationResults
-
-
