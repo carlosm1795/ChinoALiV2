@@ -2,3 +2,4 @@ export const MONGODB_URI="mongodb+srv://kusad:CsBy1mO9f70cc1Yc@cluster0.spbvxeh.
 export const MONGODB_DB_NAME="Nutricion"
 export const MONGODB_DB_USUARIOSCOLLECTION="Usuarios"
 export const MONGODB_DB_RegistroAntropometria="RegistroAntropometria"
+export const MONGODB_DB_EvaluacionClinica="EvaluacionClinica"

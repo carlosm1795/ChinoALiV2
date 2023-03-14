@@ -21,6 +21,7 @@ import MainAntropometria from "src/views/RegistrosAntropometria/MainAntropometri
 import TabInfo from 'src/views/account-settings/TabInfo'
 import TabAccount from 'src/views/account-settings/TabAccount'
 import TabSecurity from 'src/views/account-settings/TabSecurity'
+import MainEvaluacionClinica from "src/views/EvaluacionClinica/MainEvaluacionClinica"
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -70,7 +71,7 @@ const CardInsertions = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline />
-                <TabName>Security</TabName>
+                <TabName>Evaluación Clínica</TabName>
               </Box>
             }
           />
@@ -88,8 +89,8 @@ const CardInsertions = () => {
         <TabPanel sx={{ p: 0 }} value='account'>
           <MainAntropometria/>
         </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='security'>
-          <TabSecurity />
+        <TabPanel sx={{ p: 0 }} value='security'>          
+          <MainEvaluacionClinica/>
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>
           <TabInfo />

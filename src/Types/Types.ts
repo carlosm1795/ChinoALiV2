@@ -35,3 +35,18 @@ export interface RegistroAntropometria {
     Usuario:string,
     Values:Array<RegistroAntropometriaValues>
 }
+
+export interface FactsClinicos {
+    dato:string,
+    value:string|boolean,
+    comments?:string
+}
+
+export interface EvaluacionClinica {
+    _id:string,
+    FechaMedicion:Date,
+    Usuario:string,
+    APF:Array<FactsClinicos>,
+    APP:Array<FactsClinicos>,
+    Otros:Array<FactsClinicos>,
+}
