@@ -13,7 +13,9 @@ import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
+import FoodForkDrink from 'mdi-material-ui/FoodForkDrink'
+import HumanMaleHeight from 'mdi-material-ui/HumanMaleHeight'
+import TestTube from 'mdi-material-ui/TestTube'
 import InformationOutline from 'mdi-material-ui/InformationOutline'
 import MainAntropometria from "src/views/RegistrosAntropometria/MainAntropometria"
 
@@ -25,6 +27,7 @@ import MainEvaluacionClinica from "src/views/EvaluacionClinica/MainEvaluacionCli
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import ComidasForm from '../Comidas/ComidasForm'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -61,7 +64,7 @@ const CardInsertions = () => {
             value='account'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AccountOutline />
+                <HumanMaleHeight />
                 <TabName>RegistroAntropometria</TabName>
               </Box>
             }
@@ -70,7 +73,7 @@ const CardInsertions = () => {
             value='security'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <LockOpenOutline />
+                <TestTube />
                 <TabName>Evaluación Clínica</TabName>
               </Box>
             }
@@ -79,8 +82,8 @@ const CardInsertions = () => {
             value='info'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InformationOutline />
-                <TabName>Info</TabName>
+                <FoodForkDrink />
+                <TabName>Comidas</TabName>
               </Box>
             }
           />
@@ -92,8 +95,8 @@ const CardInsertions = () => {
         <TabPanel sx={{ p: 0 }} value='security'>          
           <MainEvaluacionClinica/>
         </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
+        <TabPanel sx={{ p: 0 }} value='info'>          
+          <ComidasForm/>
         </TabPanel>
       </TabContext>
     </Card>

@@ -50,3 +50,18 @@ export interface EvaluacionClinica {
     APP:Array<FactsClinicos>,
     Otros:Array<FactsClinicos>,
 }
+
+export interface Comidas {
+    Alimento:string,
+    Intercambio:number,
+    Grupoalimenticio:string,
+    TiempoDeComida:string,
+}
+export interface RegistroDeComidas {
+    _id:string,
+    Fecha:Date,
+    Usuario:string,
+    Comidas:Array<Comidas>,
+    AlimentosFavoritos:string,
+    AversionAlimentos:string,
+}
