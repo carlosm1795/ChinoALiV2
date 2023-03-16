@@ -1,6 +1,8 @@
 import { Provider } from 'react-redux'
 import {store} from "../@core/state/store"
+
 // ** Next Imports
+
 import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'

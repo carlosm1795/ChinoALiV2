@@ -31,7 +31,7 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Types Imports
-import { Usuario } from 'src/@core/Types/Types'
+import { Usuario } from 'src/Types/Types'
 import { ButtonGroup } from '@mui/material'
 
 //** Custom Hooks */
@@ -107,20 +107,20 @@ const FormLayoutUsuarios = () => {
 
   //Handle CHange form
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setUsuario(state => ({
+    setUsuario((state:any) => ({
       ...state,
       [e.target.id]: e.target.value
     }))
   }
   const HandleChangeSelect = (e: SelectChangeEvent<string>) => {
-    setUsuario(state => ({
+    setUsuario((state:any) => ({
       ...state,
       Sexo: e.target.value
     }))
   }
 
   const HandleChangeDate = (inputDate: Date | null) => {
-    setUsuario(state => ({
+    setUsuario((state:any) => ({
       ...state,
       FechaNacimiento: inputDate
     }))

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ConfigAxios } from "../Types/Types";
+import { ConfigAxios } from "src/Types/Types";
 
 const useApi = (
   config: ConfigAxios = {
