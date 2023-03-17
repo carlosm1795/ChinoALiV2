@@ -35,6 +35,7 @@ import { Usuario } from 'src/Types/Types'
 import { ButtonGroup } from '@mui/material'
 
 //** Custom Hooks */
+import MAINURL from "src/@core/lib/settings"
 import useApi from 'src/@core/hooks/useApi'
 
 interface State {
@@ -52,7 +53,7 @@ const FormLayoutUsuarios = () => {
   //Axios Call
   const CreateUserCall = useApi({
     config: {
-      url: "http://localhost:3000/api/addUser",
+      url: `${MAINURL}/api/addUser`,
       method: "POST",
     },
     shouldFire: false,

@@ -26,6 +26,7 @@ import { actionCreators, State } from 'src/@core/state'
 // ** Loader Import
 import NProgress from 'nprogress'
 // ** Types
+import MAINURL from "src/@core/lib/settings"
 import { ThemeColor } from 'src/@core/layouts/types'
 import useApi from 'src/@core/hooks/useApi'
 import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from '../../Types/Types'
@@ -55,14 +56,14 @@ const ProfileCard = () => {
 
   const GetProfileInformation = useApi({
     config: {
-      url: 'http://localhost:3000/api/getProfileInformation',
+      url: `${MAINURL}/api/getProfileInformation`,
       method: 'POST'
     },
     shouldFire: false
   })
   const GetLatestRegistroAntropometrico = useApi({
     config: {
-      url: 'http://localhost:3000/api/getLatestRegistroAntropometria',
+      url: `${MAINURL}/api/getLatestRegistroAntropometria`,
       method: 'POST'
     },
     shouldFire: false

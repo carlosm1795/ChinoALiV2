@@ -22,6 +22,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import MAINURL from "src/@core/lib/settings"
 import useApi from 'src/@core/hooks/useApi'
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
@@ -39,7 +40,7 @@ const RegistroForm = () => {
   const [dateRegistroAntro, setDateRegistroAntro] = useState<Array<RegistroAntropometria>>([])
   const InsertCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/addRegistroAntropometria',
+      url: `${MAINURL}/api/addRegistroAntropometria`,
       method: 'POST'
     },
     shouldFire: false
@@ -47,7 +48,7 @@ const RegistroForm = () => {
 
   const UpdateCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/updateRegistroAntropometria',
+      url: `${MAINURL}/api/updateRegistroAntropometria`,
       method: 'POST'
     },
     shouldFire: false
@@ -55,7 +56,7 @@ const RegistroForm = () => {
 
   const DeleteCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/deleteRegistroAntropometria',
+      url: `${MAINURL}/api/deleteRegistroAntropometria`,
       method: 'POST'
     },
     shouldFire: false
@@ -63,7 +64,7 @@ const RegistroForm = () => {
 
   const GetDateRegistrosCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/GetDateRegistrosAntropometricos',
+      url: `${MAINURL}/api/GetDateRegistrosAntropometricos`,
       method: 'POST'
     },
     shouldFire: false

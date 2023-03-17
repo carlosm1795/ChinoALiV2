@@ -11,6 +11,7 @@ import TableRow, { TableRowProps } from '@mui/material/TableRow'
 import TableCell, { TableCellProps, tableCellClasses } from '@mui/material/TableCell'
 import { RegistroAntropometria, RegistroAntropometriaValues } from 'src/Types/Types'
 import { Grid } from '@mui/material'
+import MAINURL from "src/@core/lib/settings"
 import useApi from 'src/@core/hooks/useApi'
 import NProgress from 'nprogress'
 import cogoToast from 'cogo-toast'
@@ -51,7 +52,7 @@ const ComparationResults = () => {
   })
   const GetDateRegistrosCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/GetDateRegistrosAntropometricos',
+      url: `${MAINURL}api/GetDateRegistrosAntropometricos`,
       method: 'POST'
     },
     shouldFire: false

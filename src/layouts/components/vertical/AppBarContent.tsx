@@ -25,6 +25,8 @@ import NotificationDropdown from 'src/@core/layouts/components/shared-components
 
 import { SelectOptions,Usuario } from 'src/Types/Types'
 import Select, { SingleValue } from 'react-select'
+
+import MAINURL from "src/@core/lib/settings"
 import useApi from 'src/@core/hooks/useApi'
 
 interface Props {
@@ -49,7 +51,7 @@ const AppBarContent = (props: Props) => {
 
   const GetUsuariosCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/getUser',
+      url: `${MAINURL}api/getUser`,
       method: 'GET'
     },
     shouldFire: true

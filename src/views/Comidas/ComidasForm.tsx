@@ -26,6 +26,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import useApi from 'src/@core/hooks/useApi'
+import MAINURL from "src/@core/lib/settings"
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
 import { EvaluacionClinica, RegistroDeComidas, Comidas } from 'src/Types/Types'
@@ -43,7 +44,7 @@ const RegistroForm = () => {
 
   const InsertCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/addComidas',
+      url: `${MAINURL}api/addComidas`,
       method: 'POST'
     },
     shouldFire: false
@@ -51,7 +52,7 @@ const RegistroForm = () => {
 
   const UpdateCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/updateComida',
+      url: `${MAINURL}api/updateComida`,
       method: 'POST'
     },
     shouldFire: false
@@ -59,7 +60,7 @@ const RegistroForm = () => {
 
   const DeleteCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/deleteComida',
+      url: `${MAINURL}api/deleteComida`,
       method: 'POST'
     },
     shouldFire: false
@@ -67,7 +68,7 @@ const RegistroForm = () => {
 
   const GetDateRegistrosCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/getComidas',
+      url: `${MAINURL}api/getComidas`,
       method: 'POST'
     },
     shouldFire: false

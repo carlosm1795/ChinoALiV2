@@ -24,6 +24,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import MAINURL from "src/@core/lib/settings"
 import useApi from 'src/@core/hooks/useApi'
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
@@ -41,7 +42,7 @@ const RegistroForm = () => {
   const [dateEvalacionClinica, setEvaluacionClinica] = useState<Array<RegistroAntropometria>>([])
   const InsertCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/addEvaluacionClinica',
+      url: `${MAINURL}/api/addEvaluacionClinica`,
       method: 'POST'
     },
     shouldFire: false
@@ -49,7 +50,7 @@ const RegistroForm = () => {
 
   const GetDateRegistrosCall = useApi({
     config: {
-      url: 'http://localhost:3000/api/getEvaluacionClinica',
+      url: `${MAINURL}/api/getEvaluacionClinica`,
       method: 'POST'
     },
     shouldFire: false
