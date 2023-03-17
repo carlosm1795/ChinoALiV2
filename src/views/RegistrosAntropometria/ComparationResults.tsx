@@ -11,7 +11,7 @@ import TableRow, { TableRowProps } from '@mui/material/TableRow'
 import TableCell, { TableCellProps, tableCellClasses } from '@mui/material/TableCell'
 import { RegistroAntropometria, RegistroAntropometriaValues } from 'src/Types/Types'
 import { Grid } from '@mui/material'
-import MAINURL from "src/@core/lib/settings"
+import MAINURL from 'src/@core/lib/settings'
 import useApi from 'src/@core/hooks/useApi'
 import NProgress from 'nprogress'
 import cogoToast from 'cogo-toast'
@@ -117,13 +117,64 @@ const ComparationResults = () => {
   const Data = [0, 'Peso Actual', '80', '20']
   const Data2 = [0, 'IMC', '80', '20']
 
-  const IAmChecked = (id: string) => {
-    console.log(id,checked)
+  const IAmChecked = (id: string) => {    
     if (checked.max === id || checked.min === id) {
       return true
     } else {
       return false
     }
+  }
+  const HandleButtonSelection = (id: string) => {
+    //FUnction must check if value is already in on of the fields if that is the case it must unselect the field.
+    //EmptyMax
+     //Unselect previous selection
+     if(checked.max === id || checked.min === id){
+      if(checked.max === id){
+        setChecked(info => ({
+          ...info,
+          max: ""
+        }))
+      }
+  
+      if(checked.min === id){
+        setChecked(info => ({
+          ...info,
+          min: ""
+        }))
+      }
+     }else{
+      if(checked.max === ""){
+        setChecked(info => ({
+          ...info,
+          max: id
+        }))
+      }else{     
+  
+        //Max Already in place and not seelected
+        if(checked.max !== id){
+          if((new Date(checked.max) > new Date(id)) &&  (new Date(checked.min) > new Date(id))){
+            setChecked(info => ({
+              ...info,
+              min: id
+            }))
+          }else if(new Date(checked.max) < new Date(id)){
+            let aux = new Date(checked.max)          
+            setChecked(info => ({
+              ...info,
+              max: id,
+              min:aux.toLocaleDateString()
+            }))
+          }
+        }
+      }
+      if(new Date(checked.max) > new Date(id)){
+        setChecked(info => ({
+          ...info,
+          min: id
+        }))
+      }
+     }
+    //if not selection must check if is max of min and update the value and the previous value put in the other field.
   }
   const HandleSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (checked.max === '' && e.target.checked) {
@@ -193,16 +244,13 @@ const ComparationResults = () => {
   }
 
   const CalculateValues = () => {
-    console.log(checked)
+    
     let maxValue = APIRESPONSE.findIndex(
       row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.max).toLocaleDateString()
     )
     let minValue = APIRESPONSE.findIndex(
       row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.min).toLocaleDateString()
-    )
-    console.log(maxValue)
-    console.log(bodyRows[0][maxValue + 2])
-    console.log(bodyRows[0][minValue + 2])
+    )    
     let copyBodyRows = [...bodyRows]
 
     copyBodyRows.forEach(row => {
@@ -236,13 +284,12 @@ const ComparationResults = () => {
   }, [state.ChangeOnUser])
 
   useEffect(() => {
-    if (GetDateRegistrosCall.dataReady) {
-      console.log(GetDateRegistrosCall.data)
+    if (GetDateRegistrosCall.dataReady) {      
       setAPIRESPONSE(GetDateRegistrosCall.data)
       NProgress.done()
       cogoToast.success('Registros Cargados', { position: 'top-right' })
     }
-  }, [GetDateRegistrosCall.isLoading])
+  }, [GetDateRegistrosCall.isLoading])  
   return (
     <Grid>
       <TableContainer component={Paper}>
@@ -253,13 +300,15 @@ const ComparationResults = () => {
               <StyledTableCell align='right'>Dato</StyledTableCell>
               {APIRESPONSE.map(response => (
                 <StyledTableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
-                  <Button variant="contained" onClick={() => alert(new Date(response.FechaMedicion).toLocaleDateString())}>X</Button>
-                  <Checkbox
-                    checked={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString())}
-                    id={`${new Date(response.FechaMedicion).toLocaleDateString()}`}
-                    onChange={e => HandleSelection(e)}
-                  />
-                  {new Date(response.FechaMedicion).toLocaleDateString()}
+                  <Button
+                    variant='contained'
+
+                    color={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString()) ? 'success' : 'primary'}
+                    onClick={() => HandleButtonSelection(new Date(response.FechaMedicion).toLocaleDateString())}
+                  >
+                    {new Date(response.FechaMedicion).toLocaleDateString()}
+                  </Button>                  
+                  
                 </StyledTableCell>
               ))}
             </TableRow>
@@ -267,9 +316,12 @@ const ComparationResults = () => {
           <TableBody>
             {bodyRows.map(row => (
               <StyledTableRow>
-                {row.map(info => (
+                {row.map((info,index) => (
                   <StyledTableCell align='right' component='th' scope='row'>
-                    {info}
+                    {
+                      index === 0 ? <label style={{color:parseInt(info)<0 ? "#198754" : "#ff3333"}}>{info}</label> : info
+                    }
+                    
                   </StyledTableCell>
                 ))}
               </StyledTableRow>
