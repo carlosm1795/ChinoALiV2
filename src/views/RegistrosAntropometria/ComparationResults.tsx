@@ -253,6 +253,7 @@ const ComparationResults = () => {
               <StyledTableCell align='right'>Dato</StyledTableCell>
               {APIRESPONSE.map(response => (
                 <StyledTableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
+                  <Button variant="contained" onClick={() => alert(new Date(response.FechaMedicion).toLocaleDateString())}>X</Button>
                   <Checkbox
                     checked={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString())}
                     id={`${new Date(response.FechaMedicion).toLocaleDateString()}`}

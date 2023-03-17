@@ -87,7 +87,7 @@ const AppBarContent = (props: Props) => {
           <Menu />
         </IconButton>
       ) : null}
-      <TextField
+      {/* <TextField
         size='small'
         sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
         InputProps={{
@@ -97,7 +97,7 @@ const AppBarContent = (props: Props) => {
             </InputAdornment>
           )
         }}
-      />
+      /> */}
       <Select
         placeholder='Personas'
         className='basic-single'
@@ -106,25 +106,10 @@ const AppBarContent = (props: Props) => {
         onChange={e => UpdateUserSelection(e)}
       />
     </Box>
-    <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-      {hiddenSm ? null : (
-        <Box
-          component='a'
-          target='_blank'
-          rel='noreferrer'
-          sx={{ mr: 4, display: 'flex' }}
-          href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free'
-        >
-          <img
-            height={24}
-            alt='github stars'
-            src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
-          />
-        </Box>
-      )}
+    <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>     
       <ModeToggler settings={settings} saveSettings={saveSettings} />
-      <NotificationDropdown />
-      <UserDropdown />
+      {/* <NotificationDropdown />
+      <UserDropdown /> */}
     </Box>
   </Box>
   )
