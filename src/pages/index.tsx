@@ -26,6 +26,7 @@ import DashboardUsers from "../pages/dashboardUsers/index"
 const Dashboard = () => {
   return (
     <DashboardUsers/>
+    
     // <ApexChartWrapper>
     //   <Grid container spacing={6}>
     //     <Grid item xs={12} md={4}>
