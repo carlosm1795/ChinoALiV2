@@ -15,10 +15,23 @@ import MAINURL from 'src/@core/lib/settings'
 import useApi from 'src/@core/hooks/useApi'
 import NProgress from 'nprogress'
 import cogoToast from 'cogo-toast'
+import { makeStyles } from '@mui/styles'
+
 //** State Imports */
+
 import { useDispatch, useSelector } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actionCreators, State } from 'src/@core/state'
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650
+  },
+  sticky: {
+    position: 'sticky',
+    left: 0
+  }
+})
 
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,6 +55,7 @@ const StyledTableRow = styled(TableRow)<TableRowProps>(({ theme }) => ({
 }))
 
 const ComparationResults = () => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
   const state = useSelector((state: State) => state)
@@ -60,64 +74,11 @@ const ComparationResults = () => {
 
   const [bodyRows, setBodyRows] = useState<Array<Array<any>>>([])
   const [APIRESPONSE, setAPIRESPONSE] = useState<Array<RegistroAntropometria>>([])
-  // const APIRESPONSE: Array<RegistroAntropometria> = [
-  //   {
-  //     _id: '',
-  //     FechaMedicion: new Date('01-08-2023'),
-  //     Usuario: '',
-  //     Values: [
-  //       {
-  //         dato: 'Peso',
-  //         unidades: 'kg',
-  //         value: 90
-  //       },
-  //       {
-  //         dato: 'IMC',
-  //         unidades: '',
-  //         value: 70
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     _id: '',
-  //     FechaMedicion: new Date('01-08-2022'),
-  //     Usuario: '',
-  //     Values: [
-  //       {
-  //         dato: 'Peso',
-  //         unidades: 'kg',
-  //         value: 91
-  //       },
-  //       {
-  //         dato: 'IMC',
-  //         unidades: '',
-  //         value: 71
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     _id: '',
-  //     FechaMedicion: new Date('01-08-2021'),
-  //     Usuario: '',
-  //     Values: [
-  //       {
-  //         dato: 'Peso',
-  //         unidades: 'kg',
-  //         value: 92
-  //       },
-  //       {
-  //         dato: 'IMC',
-  //         unidades: '',
-  //         value: 72
-  //       }
-  //     ]
-  //   }
-  // ]
 
   const Data = [0, 'Peso Actual', '80', '20']
   const Data2 = [0, 'IMC', '80', '20']
 
-  const IAmChecked = (id: string) => {    
+  const IAmChecked = (id: string) => {
     if (checked.max === id || checked.min === id) {
       return true
     } else {
@@ -127,53 +88,52 @@ const ComparationResults = () => {
   const HandleButtonSelection = (id: string) => {
     //FUnction must check if value is already in on of the fields if that is the case it must unselect the field.
     //EmptyMax
-     //Unselect previous selection
-     if(checked.max === id || checked.min === id){
-      if(checked.max === id){
+    //Unselect previous selection
+    if (checked.max === id || checked.min === id) {
+      if (checked.max === id) {
         setChecked(info => ({
           ...info,
-          max: ""
+          max: ''
         }))
       }
-  
-      if(checked.min === id){
+
+      if (checked.min === id) {
         setChecked(info => ({
           ...info,
-          min: ""
+          min: ''
         }))
       }
-     }else{
-      if(checked.max === ""){
+    } else {
+      if (checked.max === '') {
         setChecked(info => ({
           ...info,
           max: id
         }))
-      }else{     
-  
+      } else {
         //Max Already in place and not seelected
-        if(checked.max !== id){
-          if((new Date(checked.max) > new Date(id)) &&  (new Date(checked.min) > new Date(id))){
+        if (checked.max !== id) {
+          if (new Date(checked.max) > new Date(id) && new Date(checked.min) > new Date(id)) {
             setChecked(info => ({
               ...info,
               min: id
             }))
-          }else if(new Date(checked.max) < new Date(id)){
-            let aux = new Date(checked.max)          
+          } else if (new Date(checked.max) < new Date(id)) {
+            let aux = new Date(checked.max)
             setChecked(info => ({
               ...info,
               max: id,
-              min:aux.toLocaleDateString()
+              min: aux.toLocaleDateString()
             }))
           }
         }
       }
-      if(new Date(checked.max) > new Date(id)){
+      if (new Date(checked.max) > new Date(id)) {
         setChecked(info => ({
           ...info,
           min: id
         }))
       }
-     }
+    }
     //if not selection must check if is max of min and update the value and the previous value put in the other field.
   }
   const HandleSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,13 +204,12 @@ const ComparationResults = () => {
   }
 
   const CalculateValues = () => {
-    
     let maxValue = APIRESPONSE.findIndex(
       row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.max).toLocaleDateString()
     )
     let minValue = APIRESPONSE.findIndex(
       row => new Date(row.FechaMedicion).toLocaleDateString() === new Date(checked.min).toLocaleDateString()
-    )    
+    )
     let copyBodyRows = [...bodyRows]
 
     copyBodyRows.forEach(row => {
@@ -284,21 +243,59 @@ const ComparationResults = () => {
   }, [state.ChangeOnUser])
 
   useEffect(() => {
-    if (GetDateRegistrosCall.dataReady) {      
+    if (GetDateRegistrosCall.dataReady) {
       setAPIRESPONSE(GetDateRegistrosCall.data)
       NProgress.done()
       cogoToast.success('Registros Cargados', { position: 'top-right' })
     }
-  }, [GetDateRegistrosCall.isLoading])  
+  }, [GetDateRegistrosCall.isLoading])
   return (
     <Grid>
-      <Button onClick={ParserData} variant="contained" fullWidth>Cargar Datos</Button>
-      <TableContainer component={Paper}>
-        <Table stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
+      <Button onClick={ParserData} variant='contained' fullWidth>
+        Cargar Datos
+      </Button>
+      <TableContainer style={{ maxWidth: 400, border: '1px solid black' }}>
+        <Table stickyHeader className={classes.table} style={{ tableLayout: 'fixed' }}>
           <TableHead>
             <TableRow>
-              <StyledTableCell align='right'>Total</StyledTableCell>
-              <StyledTableCell align='right'>Dato</StyledTableCell>
+              <TableCell className={classes.sticky}>Total</TableCell>
+              <TableCell className={classes.sticky}>Dato</TableCell>
+              {APIRESPONSE.map(response => (
+                <TableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
+                  <Button
+                    variant='contained'
+                    color={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString()) ? 'success' : 'primary'}
+                    onClick={() => HandleButtonSelection(new Date(response.FechaMedicion).toLocaleDateString())}
+                  >
+                    {new Date(response.FechaMedicion).toLocaleDateString()}
+                  </Button>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {bodyRows.map((row, index) => (
+              <TableRow key={index}>
+                {row.map((info, index) => (
+                  <TableCell align='right'>
+                    {index === 0 ? (
+                      <label style={{ color: parseInt(info) < 0 ? '#198754' : '#ff3333' }} className={index <=1 ? classes.sticky : ""}>{info}</label>
+                    ) : (
+                      info
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* <TableContainer component={Paper}>
+        <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell className={classes.sticky} align='right'>Total</StyledTableCell>
+              <StyledTableCell className={classes.sticky} align='right'>Dato</StyledTableCell>
               {APIRESPONSE.map(response => (
                 <StyledTableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
                   <Button
@@ -329,8 +326,7 @@ const ComparationResults = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>      
-      
+      </TableContainer>       */}
     </Grid>
   )
 }
