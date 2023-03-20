@@ -34,7 +34,7 @@ const TestingTable = () => {
   ]
   const [total,setTotal] = useState(0)
   const Fechas = ['1/1/2020', '1/1/2021','1/1/2022','1/1/2023','1/1/2024']
-  const Data2 = [
+  const Data2:any = [
     {
       total: 0,
       label: 'Peso Actual',
