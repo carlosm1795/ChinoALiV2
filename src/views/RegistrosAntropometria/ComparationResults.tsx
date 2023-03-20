@@ -22,6 +22,7 @@ import { makeStyles } from '@mui/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actionCreators, State } from 'src/@core/state'
+import TestingTable from './TestingTable'
 
 const useStyles = makeStyles({
   table: {
@@ -254,7 +255,8 @@ const ComparationResults = () => {
       <Button onClick={ParserData} variant='contained' fullWidth>
         Cargar Datos
       </Button>
-      <TableContainer style={{ maxWidth: 400, border: '1px solid black' }}>
+      <TestingTable/>
+      {/* <TableContainer style={{ maxWidth: 400, border: '1px solid black' }}>
         <Table stickyHeader className={classes.table} style={{ tableLayout: 'fixed' }}>
           <TableHead>
             <TableRow>
@@ -289,7 +291,7 @@ const ComparationResults = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
       {/* <TableContainer component={Paper}>
         <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
