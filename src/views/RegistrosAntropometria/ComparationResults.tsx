@@ -254,8 +254,7 @@ const ComparationResults = () => {
     <Grid>
       <Button onClick={ParserData} variant='contained' fullWidth>
         Cargar Datos
-      </Button>
-      <TestingTable/>
+      </Button>      
       {/* <TableContainer style={{ maxWidth: 400, border: '1px solid black' }}>
         <Table stickyHeader className={classes.table} style={{ tableLayout: 'fixed' }}>
           <TableHead>
@@ -292,7 +291,7 @@ const ComparationResults = () => {
           </TableBody>
         </Table>
       </TableContainer> */}
-      {/* <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
         <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
             <TableRow>
@@ -328,7 +327,7 @@ const ComparationResults = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>       */}
+      </TableContainer>      
     </Grid>
   )
 }

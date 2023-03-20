@@ -70,8 +70,10 @@ export interface ConsumoUsualType {
     Q:number,
     CHO:number,
     CHON:number,
-    GRASE:number,
-    KCAL:number
+    GRASA:number,
+    KCAL:number,
+    LABEL:string,
+    ID:string,
 }
 export interface ConsumoUsual {
     _id:string,

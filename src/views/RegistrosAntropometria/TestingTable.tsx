@@ -70,7 +70,7 @@ const TestingTable = () => {
         <Cell dataKey='label' />
       </Column>
       {Fechas.map((row: any) => (        
-        <Column>
+        <Column flexGrow={1} align='center' >
           <HeaderCell>
             <Button onClick={() => Calculate(row)}>{row}</Button>
           </HeaderCell>
