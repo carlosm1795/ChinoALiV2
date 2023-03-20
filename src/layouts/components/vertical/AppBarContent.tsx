@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 //** State Imports */
 import { useDispatch, useSelector } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actionCreators,State } from 'src/@core/state'
+import { actionCreators, State } from 'src/@core/state'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material/styles'
@@ -23,11 +23,12 @@ import ModeToggler from 'src/@core/layouts/components/shared-components/ModeTogg
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 
-import { SelectOptions,Usuario } from 'src/Types/Types'
-import Select, { SingleValue } from 'react-select'
+import { SelectOptions, Usuario } from 'src/Types/Types'
+import Select, { SingleValue, components } from 'react-select'
 
-import MAINURL from "src/@core/lib/settings"
+import MAINURL from 'src/@core/lib/settings'
 import useApi from 'src/@core/hooks/useApi'
+import { Grid } from '@mui/material'
 
 interface Props {
   hidden: boolean
@@ -57,12 +58,11 @@ const AppBarContent = (props: Props) => {
     shouldFire: true
   })
 
-  const UpdateUserSelection = (user: SingleValue<SelectOptions>) => {    
-    if(user?.value){
-
+  const UpdateUserSelection = (user: SingleValue<SelectOptions>) => {
+    if (user?.value) {
       ChangeOnUser(user?.value)
-    }else{
-      ChangeOnUser("")
+    } else {
+      ChangeOnUser('')
     }
   }
 
@@ -77,17 +77,17 @@ const AppBarContent = (props: Props) => {
   }, [GetUsuariosCall.isLoading])
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-    <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-      {hidden ? (
-        <IconButton
-          color='inherit'
-          onClick={toggleNavVisibility}
-          sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
-        >
-          <Menu />
-        </IconButton>
-      ) : null}
-      {/* <TextField
+      <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+        {hidden ? (
+          <IconButton
+            color='inherit'
+            onClick={toggleNavVisibility}
+            sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
+          >
+            <Menu />
+          </IconButton>
+        ) : null}
+        {/* <TextField
         size='small'
         sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
         InputProps={{
@@ -98,20 +98,22 @@ const AppBarContent = (props: Props) => {
           )
         }}
       /> */}
-      <Select
-        placeholder='Personas'
-        className='basic-single'
-        options={usuarios}
-        isClearable
-        onChange={e => UpdateUserSelection(e)}
-      />
-    </Box>
-    <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>     
-      <ModeToggler settings={settings} saveSettings={saveSettings} />
-      {/* <NotificationDropdown />
+        <Grid item xs={12}>
+          <Select
+            placeholder='Personas'
+            className='basic-single'
+            options={usuarios}
+            isClearable            
+            onChange={e => UpdateUserSelection(e)}
+          />
+        </Grid>
+      </Box>
+      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+        <ModeToggler settings={settings} saveSettings={saveSettings} />
+        {/* <NotificationDropdown />
       <UserDropdown /> */}
+      </Box>
     </Box>
-  </Box>
   )
 }
 

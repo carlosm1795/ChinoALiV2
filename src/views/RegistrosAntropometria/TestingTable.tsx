@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import React from 'react'
+import React,{useState} from 'react'
 import { Table, Column, HeaderCell, Cell } from 'rsuite-table'
 import 'rsuite-table/dist/css/rsuite-table.css'
 const TestingTable = () => {
@@ -32,32 +32,65 @@ const TestingTable = () => {
       value: 80
     }
   ]
+  const [total,setTotal] = useState(0)
+  const Fechas = ['1/1/2020', '1/1/2021','1/1/2022','1/1/2023','1/1/2024']
+  const Data2 = [
+    {
+      total: 0,
+      label: 'Peso Actual',
+      '1/1/2020': 80,
+      '1/1/2021': 90,
+      '1/1/2022': 100,
+      '1/1/2023': 110,
+      '1/1/2024': 120
+    },
+    {
+        total: 0,
+        label: 'IMC',
+        '1/1/2020': 70,
+        '1/1/2021': 80,
+        '1/1/2022': 90,
+        '1/1/2023': 110,
+        '1/1/2024': 120
+      }
+  ]
+  const Calculate = (value:string) => {
+    console.log(Data2[0][`${value}`])
+    setTotal(total+parseInt(Data2[0][`${value}`]))
+    alert(total+parseInt(Data2[0][`${value}`]))
+  }
   return (
-    <Table data={DATA} autoHeight={true}>
-      <Column align='center' fixed>
-        <HeaderCell>Id</HeaderCell>
-        <Cell dataKey='id' />
+    <Table data={Data2} autoHeight={true}>
+      <Column align='center' fixed flexGrow={1}>
+        <HeaderCell>Total</HeaderCell>
+        <Cell dataKey='total' />
       </Column>
-      <Column fixed>
+      <Column fixed width={100} flexGrow={2}>
         <HeaderCell>Dato</HeaderCell>
-        <Cell dataKey='dato' />
+        <Cell dataKey='label' />
       </Column>
+      {Fechas.map((row: any) => (        
+        <Column>
+          <HeaderCell>
+            <Button onClick={() => Calculate(row)}>{row}</Button>
+          </HeaderCell>
+          <Cell dataKey={`${row}`} />          
+        </Column>                
+      ))}
+      
+      {/*
       <Column>
-        <HeaderCell><Button variant="contained" onClick={() => alert("Hola mundo1")}>Ejemplo</Button></HeaderCell>
-        <Cell dataKey='dato1' />
-      </Column>
-      <Column>
-        <HeaderCell><Button variant="contained" onClick={() => alert("Hola mundo2")}>Ejemplo</Button></HeaderCell>
+        <HeaderCell><Button  onClick={() => alert("Hola mundo2")}>Ejemplo</Button></HeaderCell>
         <Cell dataKey='dato2' />
       </Column>
       <Column>
-        <HeaderCell><Button variant="contained" onClick={() => alert("Hola mundo3")}>Ejemplo</Button></HeaderCell>
+        <HeaderCell><Button  onClick={() => alert("Hola mundo3")}>Ejemplo</Button></HeaderCell>
         <Cell dataKey='dato3' />
       </Column>
       <Column>
-        <HeaderCell><Button variant="contained" onClick={() => alert("Hola mundo4")}>Ejemplo</Button></HeaderCell>
+        <HeaderCell><Button  onClick={() => alert("Hola mundo4")}>Ejemplo</Button></HeaderCell>
         <Cell dataKey='dato4' />
-      </Column>     
+      </Column>      */}
     </Table>
   )
 }
