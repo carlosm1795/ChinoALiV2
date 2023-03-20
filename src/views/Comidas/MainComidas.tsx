@@ -11,37 +11,34 @@ import { styled } from '@mui/material/styles'
 import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-
-
-
-// ** Third Party Styles Imports
-import 'react-datepicker/dist/react-datepicker.css'
-import ComparationResults from './ComparationResults'
-import RegistroForm from './RegistroForm'
+import Nutrition from 'mdi-material-ui/Nutrition'
+import FormatListNumberedRtl from 'mdi-material-ui/FormatListNumberedRtl'
+import Calculator from 'mdi-material-ui/Calculator'
+import CalculoDeDieta from './CalculoDeDieta'
+import RegistroConsumoUsual from './RegistroConsumoUsual'
+import ComidasForm from './ComidasForm'
 
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
-  [theme.breakpoints.down('md')]: {
-    minWidth: 100
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: 67
-  }
-}))
+    [theme.breakpoints.down('md')]: {
+      minWidth: 100
+    },
+    [theme.breakpoints.down('sm')]: {
+      minWidth: 67
+    }
+  }))
+  
+  const TabName = styled('span')(({ theme }) => ({
+    lineHeight: 1.71,
+    fontSize: '0.875rem',
+    marginLeft: theme.spacing(2.4),
+    [theme.breakpoints.down('md')]: {
+      display: 'none'
+    }
+  }))
 
-const TabName = styled('span')(({ theme }) => ({
-  lineHeight: 1.71,
-  fontSize: '0.875rem',
-  marginLeft: theme.spacing(2.4),
-  [theme.breakpoints.down('md')]: {
-    display: 'none'
-  }
-}))
-
-const MainAntropometria = () => {
-  // ** State
+const MainComidas = () => {
+      // ** State
   const [value, setValue] = useState<string>('account')
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -60,8 +57,8 @@ const MainAntropometria = () => {
             value='account'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AccountOutline />
-                <TabName>Historico</TabName>
+                <Nutrition />
+                <TabName>Tiempos De Comida</TabName>
               </Box>
             }
           />
@@ -69,22 +66,35 @@ const MainAntropometria = () => {
             value='security'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <LockOpenOutline />
-                <TabName>Insertar Nuevo Registro</TabName>
+                <FormatListNumberedRtl />
+                <TabName>Calculo de Dieta</TabName>
+              </Box>
+            }
+          />  
+          <Tab
+            value='consumo'
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Calculator />
+                <TabName>Consumo Usual</TabName>
               </Box>
             }
           />         
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='account'>
-          <ComparationResults/>
+          <ComidasForm/>
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
-          <RegistroForm/>
+          <CalculoDeDieta/>
+        </TabPanel>        
+        <TabPanel sx={{ p: 0 }} value='consumo'>
+          <RegistroConsumoUsual/>
         </TabPanel>        
       </TabContext>
     </Card>
   )
 }
 
-export default MainAntropometria
+export default MainComidas
+

@@ -27,7 +27,7 @@ import MainEvaluacionClinica from "src/views/EvaluacionClinica/MainEvaluacionCli
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
-import ComidasForm from '../Comidas/ComidasForm'
+import MainComidas from '../Comidas/MainComidas'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -96,7 +96,7 @@ const CardInsertions = () => {
           <MainEvaluacionClinica/>
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>          
-          <ComidasForm/>
+          <MainComidas/>
         </TabPanel>
       </TabContext>
     </Card>

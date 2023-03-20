@@ -65,3 +65,26 @@ export interface RegistroDeComidas {
     AlimentosFavoritos:string,
     AversionAlimentos:string,
 }
+
+export interface ConsumoUsualType {
+    Q:number,
+    CHO:number,
+    CHON:number,
+    GRASE:number,
+    KCAL:number
+}
+export interface ConsumoUsual {
+    _id:string,
+    Fecha:Date,
+    Usuario:string,
+    Frutas:ConsumoUsualType,
+    Vegetales:ConsumoUsualType,
+    Lacteos0:ConsumoUsualType,
+    Lacteos2:ConsumoUsualType,
+    Azucares:ConsumoUsualType,
+    Cerelaes:ConsumoUsualType,
+    CarneMagra:ConsumoUsualType,
+    CarneSemi:ConsumoUsualType,
+    Grasas:ConsumoUsualType,
+
+}

@@ -292,8 +292,9 @@ const ComparationResults = () => {
   }, [GetDateRegistrosCall.isLoading])  
   return (
     <Grid>
+      <Button onClick={ParserData} variant="contained" fullWidth>Cargar Datos</Button>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label='customized table'>
+        <Table stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
             <TableRow>
               <StyledTableCell align='right'>Total</StyledTableCell>
@@ -328,9 +329,8 @@ const ComparationResults = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-      <Button onClick={ParserData}>Get Info</Button>
-      <Button onClick={CalculateValues}>Get Checks</Button>
+      </TableContainer>      
+      
     </Grid>
   )
 }
