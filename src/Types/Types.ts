@@ -84,7 +84,7 @@ export interface ConsumoUsual {
     Lacteos0:ConsumoUsualType,
     Lacteos2:ConsumoUsualType,
     Azucares:ConsumoUsualType,
-    Cerelaes:ConsumoUsualType,
+    Cereales:ConsumoUsualType,
     CarneMagra:ConsumoUsualType,
     CarneSemi:ConsumoUsualType,
     Grasas:ConsumoUsualType,
