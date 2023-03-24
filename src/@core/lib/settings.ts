@@ -5,6 +5,7 @@ export const MONGODB_DB_RegistroAntropometria="RegistroAntropometria"
 export const MONGODB_DB_EvaluacionClinica="EvaluacionClinica"
 export const MONGODB_DB_Comidas="Comidas"
 export const MONGODB_DB_Dieta="Dieta"
+export const MONGODB_DB_Consumo="Consumo"
 
 let MAINURL:string = ""
 

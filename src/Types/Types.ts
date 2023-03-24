@@ -90,3 +90,28 @@ export interface ConsumoUsual {
     Grasas:ConsumoUsualType,
 
 }
+
+export interface CalculoDietaType {
+    Q:number,    
+    KCAL:number,
+    LABEL:string,
+    ID:string,
+}
+export interface CalculoDeDieta{
+    _id:string,
+    Fecha:Date,
+    Usuario:string,
+    Frutas:CalculoDietaType,
+    Vegetales:CalculoDietaType,
+    Lacteos:CalculoDietaType,
+    Descremada:CalculoDietaType,
+    Semidescremada:CalculoDietaType,
+    Entera:CalculoDietaType,
+    Chos:CalculoDietaType,
+    Harinas:CalculoDietaType,
+    MuyMagra:CalculoDietaType,
+    Magra:CalculoDietaType,
+    SemiMagra:CalculoDietaType,
+    AltaEnGrasa:CalculoDietaType,
+    Grasas:CalculoDietaType,
+}
