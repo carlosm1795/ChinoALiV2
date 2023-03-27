@@ -147,9 +147,8 @@ const ProfileCard = () => {
     }
   }
   const renderStats = (datos: RegistroAntropometria) => {    
-    if(datos){
-
-      return datos.Values.map((item: RegistroAntropometriaValues, index: number) => (
+    if(datos){      
+      return datos.Values.filter((row) => row.dato === "Peso Actual" || row.dato === "Cadera" || row.dato === "% Grasa Visceral" || row.dato === "% Musculo" || row.dato === "Edad Metabólica" || row.dato === "Cintura" || row.dato === "% Grasa Corporal").map((item: RegistroAntropometriaValues, index: number) => (
         <Grid item xs={12} sm={3} key={index}>
           <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
             <Avatar
@@ -183,6 +182,15 @@ const ProfileCard = () => {
       )
     }
   }
+
+  const GetTalla = (datoRegistroAntropometrico:RegistroAntropometria) => {
+    let findIndex = datoRegistroAntropometrico.Values.findIndex(row => row.dato === "Talla")
+    if(findIndex !== -1){
+      return `${datoRegistroAntropometrico.Values[findIndex].value}${datoRegistroAntropometrico.Values[findIndex].unidades}`
+    }else{
+      return ""
+    }
+  }
   return (
     <>
       {state.ChangeOnUser === '' ? (
@@ -200,6 +208,13 @@ const ProfileCard = () => {
                 <Typography variant='body2'>
                   <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
                     {`email:${usuario.Email}`}
+                  </Box>
+                </Typography>
+                <Typography variant='body2'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    {
+                      GetTalla(datoRegistroAntropometrico)
+                    }
                   </Box>
                 </Typography>
                 <Typography variant='body2'>
