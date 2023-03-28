@@ -52,6 +52,7 @@
     "@mui/material": "^5.4.3",
     "@mui/styles": "^5.11.13",
     "@popperjs/core": "^2.11.2",
+    "@trycourier/courier": "^4.2.0",
     "@types/react-redux": "^7.1.25",
     "@types/redux-thunk": "^2.1.0",
     "apexcharts-clevision": "3.28.5",

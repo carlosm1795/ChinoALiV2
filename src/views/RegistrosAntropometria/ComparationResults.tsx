@@ -58,7 +58,7 @@ const StyledTableRow = styled(TableRow)<TableRowProps>(({ theme }) => ({
 const ComparationResults = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const { ChangeOnUser } = bindActionCreators(actionCreators, dispatch)
+  const { UpdateRegistroAntropometria } = bindActionCreators(actionCreators, dispatch)
   const state = useSelector((state: State) => state)
 
   const [checked, setChecked] = useState({
@@ -246,6 +246,7 @@ const ComparationResults = () => {
   useEffect(() => {
     if (GetDateRegistrosCall.dataReady) {
       setAPIRESPONSE(GetDateRegistrosCall.data)
+      UpdateRegistroAntropometria(GetDateRegistrosCall.data)
       NProgress.done()
       cogoToast.success('Registros Cargados', { position: 'top-right' })
     }
@@ -255,42 +256,6 @@ const ComparationResults = () => {
       <Button onClick={ParserData} variant='contained' fullWidth>
         Cargar Datos
       </Button>      
-      {/* <TableContainer style={{ maxWidth: 400, border: '1px solid black' }}>
-        <Table stickyHeader className={classes.table} style={{ tableLayout: 'fixed' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.sticky}>Total</TableCell>
-              <TableCell className={classes.sticky}>Dato</TableCell>
-              {APIRESPONSE.map(response => (
-                <TableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
-                  <Button
-                    variant='contained'
-                    color={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString()) ? 'success' : 'primary'}
-                    onClick={() => HandleButtonSelection(new Date(response.FechaMedicion).toLocaleDateString())}
-                  >
-                    {new Date(response.FechaMedicion).toLocaleDateString()}
-                  </Button>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bodyRows.map((row, index) => (
-              <TableRow key={index}>
-                {row.map((info, index) => (
-                  <TableCell align='right'>
-                    {index === 0 ? (
-                      <label style={{ color: parseInt(info) < 0 ? '#198754' : '#ff3333' }} className={index <=1 ? classes.sticky : ""}>{info}</label>
-                    ) : (
-                      info
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
       <TableContainer component={Paper}>
         <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>

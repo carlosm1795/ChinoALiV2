@@ -1,4 +1,5 @@
 export enum ActionType  {
     ToggleNewUser="toggleNewUser",
-    ChangeOnUsuario="changeUser"
+    ChangeOnUsuario="changeUser",
+    UpdateRegistrosAntropometricos="UpdateRegistrosAntropometricos"
 }

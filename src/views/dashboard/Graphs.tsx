@@ -1,5 +1,6 @@
 // ** React Imports
 import { ReactElement, useEffect, useState } from 'react'
+import { CourierClient } from '@trycourier/courier'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -10,8 +11,19 @@ import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import { Button,FormControl, Select, InputLabel, MenuItem, SelectChangeEvent } from '@mui/material'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, AreaChart, Area,ResponsiveContainer } from 'recharts'
+import { Button, FormControl, Select, InputLabel, MenuItem, SelectChangeEvent } from '@mui/material'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Brush,
+  AreaChart,
+  Area,
+  ResponsiveContainer
+} from 'recharts'
 
 //** State Imports */
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,32 +38,32 @@ import useApi from 'src/@core/hooks/useApi'
 import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from '../../Types/Types'
 import { ConvertUSTOCRTime } from 'src/@core/lib/GeneralUtils'
 
-const Graphs = () => {
+const Graphs = () => {  
   const state = useSelector((state: State) => state)
   const [InitialValueGraph, setInitialValueGraph] = useState('')
   const [EndValueGraph, setEndValueGraph] = useState('')
   const [data, setData] = useState([
-    {
-      dato: 'Peso Actual',
-      value: 21,
-      Grasa:15,
-      unidades: 'Kg',
-      fecha: new Date('2023-03-13T14:34:26.391Z').toLocaleDateString()
-    },
-    {
-      dato: 'Peso Actual',
-      value: 110,
-      Grasa:15,
-      unidades: 'Kg',
-      fecha: new Date('2023-01-13T19:33:49.000Z').toLocaleDateString()
-    },
-    {
-      dato: 'Peso Actual',
-      value: 120,
-      Grasa:20,
-      unidades: 'Kg',
-      fecha: new Date('2020-03-17T22:27:56.000Z').toLocaleDateString()
-    }
+    // {
+    //   dato: 'Peso Actual',
+    //   value: 21,
+    //   Grasa: 15,
+    //   unidades: 'Kg',
+    //   fecha: new Date('2023-03-13T14:34:26.391Z').toLocaleDateString()
+    // },
+    // {
+    //   dato: 'Peso Actual',
+    //   value: 110,
+    //   Grasa: 15,
+    //   unidades: 'Kg',
+    //   fecha: new Date('2023-01-13T19:33:49.000Z').toLocaleDateString()
+    // },
+    // {
+    //   dato: 'Peso Actual',
+    //   value: 120,
+    //   Grasa: 20,
+    //   unidades: 'Kg',
+    //   fecha: new Date('2020-03-17T22:27:56.000Z').toLocaleDateString()
+    // }
   ])
   const [data2, setData2] = useState([
     {
@@ -308,24 +320,65 @@ const Graphs = () => {
     setEndValueGraph(event.target.value as string)
   }
 
-  const  ParseInformationForGraph = () => {
-	let finalInformation:any  = [];
-	
-	data2.forEach((info) => {
-		let aux:any = {fecha:"",}
-		aux.fecha = new Date(info.FechaMedicion).toLocaleDateString(),
-		info.Values.forEach((measure) => {
-			aux[`${measure.dato}`] = measure.value	
-		})
-		finalInformation=[...finalInformation,{...aux}]
-	})
-	setData(finalInformation)
-}
+  const ParseInformationForGraph = (data:Array<RegistroAntropometria>) => {
+    let finalInformation: any = []
+    if(data.length > 0){
 
+      data.forEach(info => {
+        let aux: any = { fecha: '' }
+        ;(aux.fecha = new Date(info.FechaMedicion).toLocaleDateString()),
+          info.Values.forEach(measure => {
+            aux[`${measure.dato}`] = measure.value
+          })
+        finalInformation = [...finalInformation, { ...aux }]
+      })
+      setData(finalInformation)
+    }else{
+      setData([])
+    }
+  }
+
+  const sendNotification = async () => {
+    const courier = CourierClient({ authorizationToken: "pk_prod_GSY5W9SVHX4NEKPA658DDC4WKV2A" });
+    const { requestId } = await courier.send({
+      message: {
+        to: [
+          {
+            email: 'carlos.barboza@mongodb.com',
+            data: {
+              peso: {
+                value: '70',
+                unidad: 'Kg'
+              }
+            }
+          }
+        ],
+        template: 'HQF134X3G14QH8P1K8N9ZPES5K11',
+        data: {
+          peso: {
+            value: '70',
+            unidad: 'Kg'
+          }
+        }
+      }
+    })
+  }
+
+  useEffect(() => {
+    if(state.ChangeOnUser === ""){
+      setData([])
+    }
+  },[state.ChangeOnUser])
+  useEffect(() => {    
+    ParseInformationForGraph(state.UpdateRegistroAntropomoteria)    
+  },[state.UpdateRegistroAntropomoteria])
   return (
-    <Card>
-      <CardHeader title='Gráficos' />
-      <Button onClick={ParseInformationForGraph}>Process Data</Button>      
+    <>
+    {
+      state.ChangeOnUser !== "" ? <Card>
+      <CardHeader title='Gráficos' />      
+      <Button onClick={sendNotification}>Send Email</Button>
+
       <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -355,7 +408,7 @@ const Graphs = () => {
                 <MenuItem value={'Edad Metabólica'}>Edad Metabólica</MenuItem>
               </Select>
             </FormControl>
-            
+
             <LineChart
               width={500}
               height={400}
@@ -373,7 +426,7 @@ const Graphs = () => {
               <YAxis />
               <Tooltip />
               <Line type='monotone' dataKey={`${InitialValueGraph}`} stroke='#02AAB3' fill='#02AAB3' />
-              <Brush/>
+              <Brush />
             </LineChart>
           </Grid>
           <Grid item xs={6}>
@@ -419,13 +472,17 @@ const Graphs = () => {
               <XAxis dataKey='fecha' />
               <YAxis />
               <Tooltip />
-              <Line type='monotone' dataKey={`${EndValueGraph}`}  stroke='#025963' fill='#025963' />
-              <Brush/>
+              <Line type='monotone' dataKey={`${EndValueGraph}`} stroke='#025963' fill='#025963' />
+              <Brush />
             </LineChart>
           </Grid>
         </Grid>
       </CardContent>
-    </Card>
+    </Card> : null
+    }
+    
+    </>
+    
   )
 }
 

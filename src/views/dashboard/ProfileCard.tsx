@@ -184,9 +184,14 @@ const ProfileCard = () => {
   }
 
   const GetTalla = (datoRegistroAntropometrico:RegistroAntropometria) => {
-    let findIndex = datoRegistroAntropometrico.Values.findIndex(row => row.dato === "Talla")
-    if(findIndex !== -1){
-      return `${datoRegistroAntropometrico.Values[findIndex].value}${datoRegistroAntropometrico.Values[findIndex].unidades}`
+    if(datoRegistroAntropometrico?.Values){
+
+      let findIndex = datoRegistroAntropometrico.Values.findIndex(row => row.dato === "Talla")
+      if(findIndex !== -1){
+        return `${datoRegistroAntropometrico.Values[findIndex].value}${datoRegistroAntropometrico.Values[findIndex].unidades}`
+      }else{
+        return ""
+      }
     }else{
       return ""
     }
@@ -197,9 +202,7 @@ const ProfileCard = () => {
         <Card>
           <CardHeader title='Favor Seleccionar un Usuario' />
         </Card>
-      ) : null}
-
-      {usuario.Nombre.length > 0 ? (
+      ) : usuario.Nombre.length > 0 ? (
         <Card>
           <CardHeader
             title={`${usuario.Nombre} ${usuario.Apellido}`}
@@ -233,6 +236,8 @@ const ProfileCard = () => {
           </CardContent>
         </Card>
       ) : null}
+
+      
     </>
   )
 }
