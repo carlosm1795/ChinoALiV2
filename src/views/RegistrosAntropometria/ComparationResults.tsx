@@ -6,6 +6,11 @@ import Table from '@mui/material/Table'
 import { styled } from '@mui/material/styles'
 import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow, { TableRowProps } from '@mui/material/TableRow'
 import TableCell, { TableCellProps, tableCellClasses } from '@mui/material/TableCell'
@@ -60,6 +65,7 @@ const ComparationResults = () => {
   const dispatch = useDispatch()
   const { UpdateRegistroAntropometria } = bindActionCreators(actionCreators, dispatch)
   const state = useSelector((state: State) => state)
+  const [typeOfTable, setTypeOfTable] = useState('Lose')
 
   const [checked, setChecked] = useState({
     min: '',
@@ -74,6 +80,7 @@ const ComparationResults = () => {
   })
 
   const [bodyRows, setBodyRows] = useState<Array<Array<any>>>([])
+  const [secondRows, setSecondRows] = useState<Array<Array<any>>>([])
   const [APIRESPONSE, setAPIRESPONSE] = useState<Array<RegistroAntropometria>>([])
 
   const Data = [0, 'Peso Actual', '80', '20']
@@ -181,7 +188,6 @@ const ComparationResults = () => {
     let finalResults = []
     if (APIRESPONSE.length > 0) {
       const headers = GetHeader(APIRESPONSE[0].Values)
-      console.log(headers)
       let size = APIRESPONSE[0].Values.length
       for (let index = 0; index < size; index++) {
         let aux = [0, headers[index]]
@@ -196,8 +202,19 @@ const ComparationResults = () => {
     finalResults.map(result => {
       rows = [...rows, [...result]]
     })
-    console.log(rows)
     setBodyRows(rows)
+    setSecondRows(
+      rows.filter(
+        (row: any) =>
+          row[1] !== 'Talla' &&
+          row[1] !== 'Muneca' &&
+          row[1] !== 'Constitucion Corporal' &&
+          row[1] !== 'Peso Ideal' &&
+          row[1] !== '% Peso para la talla' &&
+          row[1] !== 'Peso Ajustado' &&
+          row[1] !== 'Peso Meta'
+      )
+    )
   }
 
   const GetHeader = (arrayofValues: Array<RegistroAntropometriaValues>) => {
@@ -222,6 +239,10 @@ const ComparationResults = () => {
     })
 
     setBodyRows(copyBodyRows)
+  }
+
+  const handleChangeRadioGroup = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTypeOfTable((event.target as HTMLInputElement).value)
   }
 
   useEffect(() => {
@@ -251,48 +272,105 @@ const ComparationResults = () => {
       cogoToast.success('Registros Cargados', { position: 'top-right' })
     }
   }, [GetDateRegistrosCall.isLoading])
+
+  useEffect(() => {
+    if (APIRESPONSE.length > 0) {
+      ParserData()
+    }
+  }, [APIRESPONSE])
+
+  const ReturnValueWithColor = (info: any, row: any) => {    
+    if (typeOfTable === 'Lose') {
+      if (row[1] === '% Musculo') {
+        if (row[0] < 0) {
+          return <label style={{ color: '#ff3333' }}>{info}</label>
+        } else {
+          return <label style={{ color: '#198754' }}>{info}</label>
+        }
+      } else if (row[0] > 0) {
+        return <label style={{ color: '#ff3333' }}>{info}</label>
+      } else {
+        return <label style={{ color: '#198754' }}>{info}</label>
+      }
+    } else {
+      if (row[1] === '% Musculo') {
+        if (row[0] < 0) {
+          return <label style={{ color: '#ff3333' }}>{info}</label>
+        } else {
+          return <label style={{ color: '#198754' }}>{info}</label>
+        }
+      } else if (row[0] < 0) {
+        return <label style={{ color: '#ff3333' }}>{info}</label>
+      } else {
+        return <label style={{ color: '#198754' }}>{info}</label>
+        
+      }
+    }
+    return info
+  }
+  useEffect(() => {
+    if(secondRows.length > 0){      
+      setSecondRows(secondRows)
+    }
+  },[typeOfTable])
   return (
     <Grid>
-      <Button onClick={ParserData} variant='contained' fullWidth>
+      {/* <Button onClick={ParserData} variant='contained' fullWidth>
         Cargar Datos
-      </Button>      
+      </Button> */}
+      <FormControl>
+        <FormLabel id='demo-row-radio-buttons-group-label'>Objetivo</FormLabel>
+        <RadioGroup
+          row
+          aria-labelledby='demo-row-radio-buttons-group-label'
+          name='row-radio-buttons-group'
+          value={typeOfTable}
+          onChange={handleChangeRadioGroup}
+        >
+          <FormControlLabel value='Lose' control={<Radio />} label='Disminución De Peso' />
+          <FormControlLabel value='Win' control={<Radio />} label='Aumento De Peso' />
+        </RadioGroup>
+      </FormControl>
       <TableContainer component={Paper}>
         <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
             <TableRow>
-              <StyledTableCell className={classes.sticky} align='right'>Total</StyledTableCell>
-              <StyledTableCell className={classes.sticky} align='right'>Dato</StyledTableCell>
+              <StyledTableCell className={classes.sticky} align='right'>
+                Total
+              </StyledTableCell>
+              <StyledTableCell className={classes.sticky} align='right'>
+                Dato
+              </StyledTableCell>
               {APIRESPONSE.map(response => (
                 <StyledTableCell align='right' key={new Date(response.FechaMedicion).toLocaleDateString()}>
                   <Button
                     variant='contained'
-
-                    color={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString()) ? 'success' : 'primary'}
+                    style={{ color: 'white' }}
+                    color={IAmChecked(new Date(response.FechaMedicion).toLocaleDateString()) ? 'secondary' : 'primary'}
                     onClick={() => HandleButtonSelection(new Date(response.FechaMedicion).toLocaleDateString())}
                   >
                     {new Date(response.FechaMedicion).toLocaleDateString()}
-                  </Button>                  
-                  
+                  </Button>
                 </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {bodyRows.map(row => (
+            {secondRows.map(row => (
               <StyledTableRow>
-                {row.map((info,index) => (
+                {row.map((info, index) => (
                   <StyledTableCell align='right' component='th' scope='row'>
-                    {
-                      index === 0 ? <label style={{color:parseInt(info)<0 ? "#198754" : "#ff3333"}}>{info}</label> : info
-                    }
-                    
+                    {index === 0
+                      ? 
+                        ReturnValueWithColor(info, row)
+                      : info}
                   </StyledTableCell>
                 ))}
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
-      </TableContainer>      
+      </TableContainer>
     </Grid>
   )
 }
