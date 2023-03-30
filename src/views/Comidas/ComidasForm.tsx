@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux'
 import { actionCreators, State } from 'src/@core/state'
 
 // ** MUI Imports
+import Plus from 'mdi-material-ui/Plus'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
@@ -26,10 +27,10 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import useApi from 'src/@core/hooks/useApi'
-import MAINURL from "src/@core/lib/settings"
+import MAINURL from 'src/@core/lib/settings'
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
-import { EvaluacionClinica, RegistroDeComidas, Comidas } from 'src/Types/Types'
+import { EvaluacionClinica, RegistroDeComidas, RegistroDeComidas2, Comidas2, Comidas } from 'src/Types/Types'
 import { ButtonGroup } from '@mui/material'
 
 const CustomInput = forwardRef((props, ref) => {
@@ -73,7 +74,21 @@ const RegistroForm = () => {
     },
     shouldFire: false
   })
-
+  const [formValue2, setFormValue2] = useState<RegistroDeComidas2>({
+    _id: '',
+    Usuario: '',
+    Fecha: new Date(),
+    Comidas: {
+      Desayuno: [],
+      'Merienda Mañana': [],
+      Almuerzo: [],
+      'Merienda Tarde': [],
+      Cena: [],
+      'Colación Nocturna': []
+    },
+    AlimentosFavoritos: '',
+    AversionAlimentos: ''
+  })
   const [formValue, setFormValue] = useState<RegistroDeComidas>({
     _id: '',
     Usuario: '',
@@ -162,19 +177,23 @@ const RegistroForm = () => {
       AlimentosFavoritos: '',
       AversionAlimentos: ''
     })
+    setFormValue2({
+      _id: '',
+      Usuario: '',
+      Fecha: new Date(),
+      Comidas: {
+        Desayuno: [{ Alimento: '', Grupoalimenticio: '', Intercambio: 0 }],
+        'Merienda Mañana': [],
+        Almuerzo: [],
+        'Merienda Tarde': [],
+        Cena: [],
+        'Colación Nocturna': []
+      },
+      AlimentosFavoritos: '',
+      AversionAlimentos: ''
+    })
   }
-  const AddTiempoDeComida = () => {
-    let newTime: Comidas = {
-      Alimento: '',
-      Intercambio: 0,
-      Grupoalimenticio: '',
-      TiempoDeComida: ''
-    }
-    setFormValue(data => ({
-      ...data,
-      Comidas: [...data.Comidas, newTime]
-    }))
-  }
+
 
   const RemoveTiempo = (index: number) => {
     let newInformation = { ...formValue }
@@ -198,7 +217,7 @@ const RegistroForm = () => {
     }
 
     if (result) {
-      setFormValue({ ...result, Fecha: new Date(result.Fecha) })
+      setFormValue2({ ...result, Fecha: new Date(result.Fecha) })
     } else {
       ResetForm()
     }
@@ -208,7 +227,7 @@ const RegistroForm = () => {
     if (formValue._id === '') {
       InsertCall.setParameters((info: any) => ({
         ...info,
-        data: { ...formValue, Usuario: state.ChangeOnUser }
+        data: { ...formValue2, Usuario: state.ChangeOnUser }
       }))
       NProgress.start()
       InsertCall.setFire(true)
@@ -216,7 +235,7 @@ const RegistroForm = () => {
       UpdateCall.setParameters((info: any) => ({
         ...info,
         data: {
-          ...formValue,
+          ...formValue2,
           Usuario: state.ChangeOnUser
         }
       }))
@@ -269,6 +288,130 @@ const RegistroForm = () => {
       GetDateRegistrosCall.setFire(true)
     }
   }, [DeleteCall.isLoading])
+
+  const AddTiempoDeComidaIndividual = (tiempo: String) => {
+    let aux = { ...formValue2 }
+    switch (tiempo) {
+      case 'Desayuno':
+        aux.Comidas.Desayuno.push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+      case 'Merienda Mañana':
+        aux.Comidas['Merienda Mañana'].push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+      case 'Almuerzo':
+        aux.Comidas.Almuerzo.push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+      case 'Merienda Tarde':
+        aux.Comidas['Merienda Tarde'].push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+      case 'Cena':
+        aux.Comidas.Cena.push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+      case 'Colación Nocturna':
+        aux.Comidas['Colación Nocturna'].push({ Alimento: '', Grupoalimenticio: '', Intercambio: 0 })
+        break
+    }
+    setFormValue2({ ...aux })
+  }
+
+  const DeleteTiempoDeComidaIndividual = (tiempo: string, index: number) => {
+    let aux = { ...formValue2 }
+    switch (tiempo) {
+      case 'Desayuno':
+        aux.Comidas.Desayuno.splice(index, 1)
+        break
+      case 'Merienda Mañana':
+        aux.Comidas['Merienda Mañana'].splice(index, 1)
+        break
+      case 'Almuerzo':
+        aux.Comidas.Almuerzo.splice(index, 1)
+        break
+      case 'Merienda Tarde':
+        aux.Comidas['Merienda Tarde'].splice(index, 1)
+        break
+      case 'Cena':
+        aux.Comidas.Cena.splice(index, 1)
+        break
+      case 'Colación Nocturna':
+        aux.Comidas['Colación Nocturna'].splice(index, 1)
+        break
+    }
+
+    setFormValue2({ ...aux })
+  }
+
+  const UpdateAlimento = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    tiempo: string,
+    index: number
+  ) => {
+    let aux = { ...formValue2 }
+    switch (tiempo) {
+      case 'Desayuno':
+        aux.Comidas.Desayuno[index].Alimento = e.target.value
+        break
+      case 'Merienda Mañana':
+        aux.Comidas['Merienda Mañana'][index].Alimento = e.target.value
+        break
+      case 'Almuerzo':
+        aux.Comidas.Almuerzo[index].Alimento = e.target.value
+        break
+      case 'Merienda Tarde':
+        aux.Comidas['Merienda Tarde'][index].Alimento = e.target.value
+        break
+      case 'Cena':
+        aux.Comidas.Cena[index].Alimento = e.target.value
+        break
+    }
+    setFormValue2({ ...aux })
+  }
+  const UpdateIntercambio = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    tiempo: string,
+    index: number
+  ) => {
+    let aux = { ...formValue2 }
+    switch (tiempo) {
+      case 'Desayuno':
+        aux.Comidas.Desayuno[index].Intercambio = parseInt(e.target.value)
+        break
+      case 'Merienda Mañana':
+        aux.Comidas['Merienda Mañana'][index].Intercambio = parseInt(e.target.value)
+        break
+      case 'Almuerzo':
+        aux.Comidas.Almuerzo[index].Intercambio = parseInt(e.target.value)
+        break
+      case 'Merienda Tarde':
+        aux.Comidas['Merienda Tarde'][index].Intercambio = parseInt(e.target.value)
+        break
+      case 'Cena':
+        aux.Comidas.Cena[index].Intercambio = parseInt(e.target.value)
+        break
+    }
+    setFormValue2({ ...aux })
+  }
+  const UpdateGrupoAlimenticio = (e: SelectChangeEvent<any>, tiempo: string, index: number) => {
+    let aux = { ...formValue2 }
+    console.log(e)
+    switch (tiempo) {
+      case 'Desayuno':
+        aux.Comidas.Desayuno[index].Grupoalimenticio = e.target.value
+        break
+      case 'Merienda Mañana':
+        aux.Comidas['Merienda Mañana'][index].Grupoalimenticio = e.target.value
+        break
+      case 'Almuerzo':
+        aux.Comidas.Almuerzo[index].Grupoalimenticio = e.target.value
+        break
+      case 'Merienda Tarde':
+        aux.Comidas['Merienda Tarde'][index].Grupoalimenticio = e.target.value
+        break
+      case 'Cena':
+        aux.Comidas.Cena[index].Grupoalimenticio = e.target.value
+        break
+    }
+    setFormValue2({ ...aux })
+  }
   return (
     <CardContent>
       <Grid container spacing={7}>
@@ -328,11 +471,7 @@ const RegistroForm = () => {
             selected={formValue.Fecha}
           />
         </Grid>
-        <Grid item xs={12} sm={12}>
-          <Button variant='outlined' fullWidth onClick={AddTiempoDeComida}>
-            Aggregar Tiempo de Comida
-          </Button>
-        </Grid>
+        
         {formValue.Comidas.map((row, index) => (
           <React.Fragment key={index}>
             <Grid item xs={12} sm={1}>
@@ -410,17 +549,449 @@ const RegistroForm = () => {
           </React.Fragment>
         ))}
         <Grid item xs={12} sm={12}>
-          <ButtonGroup fullWidth>
-            <Button variant='contained' fullWidth onClick={ExecuteCall}>
-              {formValue._id === '' ? 'Registrar' : 'Actualizar'}
-            </Button>
-            {formValue._id !== '' ? (
-              <Button variant='outlined' fullWidth onClick={Delete}>
-                Eliminar
-              </Button>
-            ) : null}
-          </ButtonGroup>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas.Desayuno.length > 0 ? `Desayuno(${formValue2.Comidas.Desayuno.length})` : 'Desayuno'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Desayuno')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
         </Grid>
+        {formValue2.Comidas.Desayuno.map((desayuno, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Desayuno', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas.Desayuno[index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Desayuno', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas.Desayuno[index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Desayuno', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Desayuno'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Desayuno', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+        <Grid item xs={12} sm={12}>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas['Merienda Mañana'].length > 0
+              ? `Merienda Mañana(${formValue2.Comidas['Merienda Mañana'].length})`
+              : 'Merienda Mañana'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Merienda Mañana')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
+        </Grid>
+        {formValue2.Comidas['Merienda Mañana'].map((desayuno, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Merienda Mañana', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas['Merienda Mañana'][index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Merienda Mañana', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas['Merienda Mañana'][index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Merienda Mañana', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Merienda Mañana'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Merienda Mañana', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+        <Grid item xs={12} sm={12}>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas.Almuerzo.length > 0 ? `Almuerzo(${formValue2.Comidas.Almuerzo.length})` : 'Almuerzo'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Almuerzo')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
+        </Grid>
+        {formValue2.Comidas.Almuerzo.map((Almuerzo, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Almuerzo', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas.Almuerzo[index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Almuerzo', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas.Almuerzo[index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Almuerzo', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Almuerzo'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Almuerzo', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+        <Grid item xs={12} sm={12}>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas['Merienda Tarde'].length > 0
+              ? `Merienda Tarde(${formValue2.Comidas['Merienda Tarde'].length})`
+              : 'Merienda Tarde'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Merienda Tarde')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
+        </Grid>
+        {formValue2.Comidas['Merienda Tarde'].map((desayuno, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Merienda Tarde', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas['Merienda Tarde'][index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Merienda Tarde', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas['Merienda Tarde'][index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Merienda Tarde', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Merienda Tarde'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Merienda Tarde', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+        <Grid item xs={12} sm={12}>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas.Cena.length > 0 ? `Cena(${formValue2.Comidas.Cena.length})` : 'Cena'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Cena')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
+        </Grid>
+        {formValue2.Comidas.Cena.map((Cena, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Cena', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas.Cena[index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Cena', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas.Cena[index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Cena', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Cena'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Cena', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+        <Grid item xs={12} sm={12}>
+          <InputLabel id='demo-simple-select-label'>
+            {formValue2.Comidas['Colación Nocturna'].length > 0
+              ? `Colación Nocturna(${formValue2.Comidas['Colación Nocturna'].length})`
+              : 'Colación Nocturna'}
+            <IconButton
+              color='primary'
+              aria-label='upload picture'
+              component='label'
+              onClick={() => AddTiempoDeComidaIndividual('Colación Nocturna')}
+            >
+              <Plus />
+            </IconButton>
+          </InputLabel>
+        </Grid>
+        {formValue2.Comidas['Colación Nocturna'].map((desayuno, index) => (
+          <React.Fragment key={index}>
+            <Grid item xs={12} sm={1}>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => DeleteTiempoDeComidaIndividual('Colación Nocturna', index)}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                id='Alimento'
+                fullWidth
+                label='Alimento'
+                placeholder='Alimento'
+                autoComplete='off'
+                value={formValue2.Comidas['Colación Nocturna'][index].Alimento}
+                onChange={e => UpdateAlimento(e, 'Colación Nocturna', index)}
+                defaultValue=''
+                type='text'
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                id='Intercambio'
+                fullWidth
+                label='Intercambio'
+                placeholder='Intercambio'
+                defaultValue=''
+                type='number'
+                value={formValue2.Comidas['Colación Nocturna'][index].Intercambio}
+                onChange={e => UpdateIntercambio(e, 'Colación Nocturna', index)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Grupo Alimenticio</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='GrupoAlimenticio'
+                  name='Grupoalimenticio'
+                  label='Grupo Alimenticio'
+                  value={formValue2.Comidas['Colación Nocturna'][index].Grupoalimenticio}
+                  onChange={e => UpdateGrupoAlimenticio(e, 'Colación Nocturna', index)}
+                >
+                  <MenuItem value='Carbohidratos'>Carbohidratos</MenuItem>
+                  <MenuItem value='Proteina'>Proteina</MenuItem>
+                  <MenuItem value='Grasa'>Grasa</MenuItem>
+                  <MenuItem value='Frutas'>Frutas</MenuItem>
+                  <MenuItem value='Azucar'>Azucar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </React.Fragment>
+        ))}
+      </Grid>
+      <Grid item xs={12} sm={12}>
+        <ButtonGroup fullWidth>
+          <Button variant='contained' fullWidth onClick={ExecuteCall}>
+            {formValue2._id === '' ? 'Registrar' : 'Actualizar'}
+          </Button>
+          {formValue2._id !== '' ? (
+            <Button variant='outlined' fullWidth onClick={Delete}>
+              Eliminar
+            </Button>
+          ) : null}
+        </ButtonGroup>
       </Grid>
     </CardContent>
   )

@@ -66,6 +66,28 @@ export interface RegistroDeComidas {
     AversionAlimentos:string,
 }
 
+export interface Comidas2 {
+    Alimento:string,
+    Intercambio:number,
+    Grupoalimenticio:string, 
+}
+
+export interface RegistroDeComidas2 {
+    _id:string,
+    Fecha:Date,
+    Usuario:string,
+    Comidas:{
+        Desayuno:Array<Comidas2>,
+        "Merienda Mañana":Array<Comidas2>,
+        Almuerzo:Array<Comidas2>,
+        "Merienda Tarde":Array<Comidas2>,
+        Cena:Array<Comidas2>,
+        "Colación Nocturna":Array<Comidas2>,
+    },
+    AlimentosFavoritos:string,
+    AversionAlimentos:string,
+}
+
 export interface ConsumoUsualType {
     Q:number,
     CHO:number,
