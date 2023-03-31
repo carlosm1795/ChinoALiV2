@@ -38,7 +38,7 @@ import useApi from 'src/@core/hooks/useApi'
 import { RegistroAntropometria, Usuario, RegistroAntropometriaValues } from '../../Types/Types'
 import { ConvertUSTOCRTime } from 'src/@core/lib/GeneralUtils'
 
-const Graphs = () => {  
+const Graphs = () => {
   const state = useSelector((state: State) => state)
   const [InitialValueGraph, setInitialValueGraph] = useState('')
   const [EndValueGraph, setEndValueGraph] = useState('')
@@ -320,10 +320,9 @@ const Graphs = () => {
     setEndValueGraph(event.target.value as string)
   }
 
-  const ParseInformationForGraph = (data:Array<RegistroAntropometria>) => {
+  const ParseInformationForGraph = (data: Array<RegistroAntropometria>) => {
     let finalInformation: any = []
-    if(data.length > 0){
-
+    if (data.length > 0) {
       data.forEach(info => {
         let aux: any = { fecha: '' }
         ;(aux.fecha = new Date(info.FechaMedicion).toLocaleDateString()),
@@ -333,13 +332,13 @@ const Graphs = () => {
         finalInformation = [...finalInformation, { ...aux }]
       })
       setData(finalInformation)
-    }else{
+    } else {
       setData([])
     }
   }
 
   const sendNotification = async () => {
-    const courier = CourierClient({ authorizationToken: "pk_prod_GSY5W9SVHX4NEKPA658DDC4WKV2A" });
+    const courier = CourierClient({ authorizationToken: 'pk_prod_GSY5W9SVHX4NEKPA658DDC4WKV2A' })
     const { requestId } = await courier.send({
       message: {
         to: [
@@ -365,124 +364,121 @@ const Graphs = () => {
   }
 
   useEffect(() => {
-    if(state.ChangeOnUser === ""){
+    if (state.ChangeOnUser === '') {
       setData([])
     }
-  },[state.ChangeOnUser])
-  useEffect(() => {    
-    ParseInformationForGraph(state.UpdateRegistroAntropomoteria)    
-  },[state.UpdateRegistroAntropomoteria])
+  }, [state.ChangeOnUser])
+  useEffect(() => {
+    ParseInformationForGraph(state.UpdateRegistroAntropomoteria)
+  }, [state.UpdateRegistroAntropomoteria])
   return (
     <>
-    {
-      state.ChangeOnUser !== "" ? <Card>
-      <CardHeader title='Gráficos' />      
-      <Button onClick={sendNotification}>Send Email</Button>
+      {state.ChangeOnUser !== '' ? (
+        <Card>
+          <CardHeader title='Gráficos' />
+          <Button onClick={sendNotification}>Send Email</Button>
 
-      <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Medida</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={InitialValueGraph}
-                label='Age'
-                onChange={e => handleChange(e)}
-              >
-                <MenuItem value={'Talla'}>Talla</MenuItem>
-                <MenuItem value={'IMC'}>IMC</MenuItem>
-                <MenuItem value={'Cintura'}>Cintura</MenuItem>
-                <MenuItem value={'Cadera'}>Cadera</MenuItem>
-                <MenuItem value={'Muneca'}>Muñeca</MenuItem>
-                <MenuItem value={'Constitucion Corporal'}>Cosntitucion Corporal</MenuItem>
-                <MenuItem value={'Peso Ideal'}>Peso Ideal</MenuItem>
-                <MenuItem value={'Peso Actual'}>Peso Actual</MenuItem>
-                <MenuItem value={'% Peso para la talla'}>% Peso para la talla</MenuItem>
-                <MenuItem value={'Peso Ajustado'}>Peso Ajustado</MenuItem>
-                <MenuItem value={'Peso Meta'}>Peso Meta</MenuItem>
-                <MenuItem value={'% Grasa Corporal'}>% Grasa Corporal</MenuItem>
-                <MenuItem value={'% Grasa Visceral'}>% Grasa Visceral</MenuItem>
-                <MenuItem value={'% Musculo'}>% Musculo</MenuItem>
-                <MenuItem value={'Edad Metabólica'}>Edad Metabólica</MenuItem>
-              </Select>
-            </FormControl>
-
-            <LineChart
-              width={500}
-              height={400}
-              data={data}
-              syncId='anyId'
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0
-              }}
-            >
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='fecha' />
-              <YAxis />
-              <Tooltip />
-              <Line type='monotone' dataKey={`${InitialValueGraph}`} stroke='#02AAB3' fill='#02AAB3' />
-              <Brush />
-            </LineChart>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Medida</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={EndValueGraph}
-                label='Age'
-                onChange={e => handleChangeEnd(e)}
-              >
-                <MenuItem value={'Talla'}>Talla</MenuItem>
-                <MenuItem value={'IMC'}>IMC</MenuItem>
-                <MenuItem value={'Cintura'}>Cintura</MenuItem>
-                <MenuItem value={'Cadera'}>Cadera</MenuItem>
-                <MenuItem value={'Muneca'}>Muñeca</MenuItem>
-                <MenuItem value={'Constitucion Corporal'}>Cosntitucion Corporal</MenuItem>
-                <MenuItem value={'Peso Ideal'}>Peso Ideal</MenuItem>
-                <MenuItem value={'Peso Actual'}>Peso Actual</MenuItem>
-                <MenuItem value={'% Peso para la talla'}>% Peso para la talla</MenuItem>
-                <MenuItem value={'Peso Ajustado'}>Peso Ajustado</MenuItem>
-                <MenuItem value={'Peso Meta'}>Peso Meta</MenuItem>
-                <MenuItem value={'% Grasa Corporal'}>% Grasa Corporal</MenuItem>
-                <MenuItem value={'% Grasa Visceral'}>% Grasa Visceral</MenuItem>
-                <MenuItem value={'% Musculo'}>% Musculo</MenuItem>
-                <MenuItem value={'Edad Metabólica'}>Edad Metabólica</MenuItem>
-              </Select>
-            </FormControl>
-            <LineChart
-              width={500}
-              height={400}
-              data={data}
-              syncId='anyId'
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0
-              }}
-            >
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='fecha' />
-              <YAxis />
-              <Tooltip />
-              <Line type='monotone' dataKey={`${EndValueGraph}`} stroke='#025963' fill='#025963' />
-              <Brush />
-            </LineChart>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card> : null
-    }
-    
+          <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <FormControl fullWidth>
+                  <InputLabel id='demo-simple-select-label'>Medida</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={InitialValueGraph}
+                    label='Age'
+                    onChange={e => handleChange(e)}
+                  >
+                    <MenuItem value={'Talla'}>Talla</MenuItem>
+                    <MenuItem value={'IMC'}>IMC</MenuItem>
+                    <MenuItem value={'Cintura'}>Cintura</MenuItem>
+                    <MenuItem value={'Cadera'}>Cadera</MenuItem>
+                    <MenuItem value={'Muneca'}>Muñeca</MenuItem>
+                    <MenuItem value={'Constitucion Corporal'}>Cosntitucion Corporal</MenuItem>
+                    <MenuItem value={'Peso Ideal'}>Peso Ideal</MenuItem>
+                    <MenuItem value={'Peso Actual'}>Peso Actual</MenuItem>
+                    <MenuItem value={'% Peso para la talla'}>% Peso para la talla</MenuItem>
+                    <MenuItem value={'Peso Ajustado'}>Peso Ajustado</MenuItem>
+                    <MenuItem value={'Peso Meta'}>Peso Meta</MenuItem>
+                    <MenuItem value={'% Grasa Corporal'}>% Grasa Corporal</MenuItem>
+                    <MenuItem value={'% Grasa Visceral'}>% Grasa Visceral</MenuItem>
+                    <MenuItem value={'% Musculo'}>% Musculo</MenuItem>
+                    <MenuItem value={'Edad Metabólica'}>Edad Metabólica</MenuItem>
+                  </Select>
+                </FormControl>
+                <ResponsiveContainer key='1' width="100%" height="80%">
+                  <LineChart                    
+                    data={data}
+                    syncId='anyId'
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 0,
+                      bottom: 0
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray='3 3' />
+                    <XAxis dataKey='fecha' />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type='monotone' dataKey={`${InitialValueGraph}`} stroke='#02AAB3' fill='#02AAB3' />
+                    <Brush />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Grid>
+              <Grid item xs={12}  sm={12}>
+                <FormControl fullWidth>
+                  <InputLabel id='demo-simple-select-label'>Medida</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={EndValueGraph}
+                    label='Age'
+                    onChange={e => handleChangeEnd(e)}
+                  >
+                    <MenuItem value={'Talla'}>Talla</MenuItem>
+                    <MenuItem value={'IMC'}>IMC</MenuItem>
+                    <MenuItem value={'Cintura'}>Cintura</MenuItem>
+                    <MenuItem value={'Cadera'}>Cadera</MenuItem>
+                    <MenuItem value={'Muneca'}>Muñeca</MenuItem>
+                    <MenuItem value={'Constitucion Corporal'}>Cosntitucion Corporal</MenuItem>
+                    <MenuItem value={'Peso Ideal'}>Peso Ideal</MenuItem>
+                    <MenuItem value={'Peso Actual'}>Peso Actual</MenuItem>
+                    <MenuItem value={'% Peso para la talla'}>% Peso para la talla</MenuItem>
+                    <MenuItem value={'Peso Ajustado'}>Peso Ajustado</MenuItem>
+                    <MenuItem value={'Peso Meta'}>Peso Meta</MenuItem>
+                    <MenuItem value={'% Grasa Corporal'}>% Grasa Corporal</MenuItem>
+                    <MenuItem value={'% Grasa Visceral'}>% Grasa Visceral</MenuItem>
+                    <MenuItem value={'% Musculo'}>% Musculo</MenuItem>
+                    <MenuItem value={'Edad Metabólica'}>Edad Metabólica</MenuItem>
+                  </Select>
+                </FormControl>
+                <ResponsiveContainer key='1' width="100%" height="80%">
+                <LineChart                  
+                  data={data}
+                  syncId='anyId'
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0
+                  }}
+                >
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='fecha' />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type='monotone' dataKey={`${EndValueGraph}`} stroke='#025963' fill='#025963' />
+                  <Brush />
+                </LineChart>
+                </ResponsiveContainer>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      ) : null}
     </>
-    
   )
 }
 

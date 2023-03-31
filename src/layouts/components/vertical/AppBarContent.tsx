@@ -98,14 +98,16 @@ const AppBarContent = (props: Props) => {
           )
         }}
       /> */}
-        <Grid item xs={12}>
-          <Select
-            placeholder='Personas'
-            className='basic-single'
-            options={usuarios}
-            isClearable            
-            onChange={e => UpdateUserSelection(e)}
-          />
+        <Grid item xs={12} sm={12}>
+          <div style={{ width: '100%' }}>
+            <Select
+              placeholder='Personas'
+              className='basic-single'
+              options={usuarios}
+              isClearable
+              onChange={e => UpdateUserSelection(e)}
+            />
+          </div>
         </Grid>
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
