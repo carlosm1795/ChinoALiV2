@@ -34,6 +34,8 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const RegistroConsumoUsual = () => {
+  const [qTotal,setQTotal] = useState(0)
+  const [KCALTotal,setKCALTotal] = useState(0)
   const [formValue, setFormValue] = useState<CalculoDeDieta>({
     _id: '',
     Fecha: new Date(),
@@ -250,7 +252,7 @@ const RegistroConsumoUsual = () => {
       </React.Fragment>
     )
   }
-
+  
   const Execute = () => {
 
   }
@@ -258,6 +260,13 @@ const RegistroConsumoUsual = () => {
   const Delete =() => {
     
   }
+
+  useEffect(() => {    
+    const qTotal = formValue.AltaEnGrasa.Q+formValue.Chos.Q+formValue.Descremada.Q+formValue.Entera.Q+formValue.Frutas.Q+formValue.Grasas.Q+formValue.Harinas.Q+formValue.Lacteos.Q+formValue.Magra.Q+formValue.MuyMagra.Q+formValue.SemiMagra.Q+formValue.Semidescremada.Q+formValue.Vegetales.Q;
+    const KCALTotal = formValue.AltaEnGrasa.KCAL+formValue.Chos.KCAL+formValue.Descremada.KCAL+formValue.Entera.KCAL+formValue.Frutas.KCAL+formValue.Grasas.KCAL+formValue.Harinas.KCAL+formValue.Lacteos.KCAL+formValue.Magra.KCAL+formValue.MuyMagra.KCAL+formValue.SemiMagra.KCAL+formValue.Semidescremada.KCAL+formValue.Vegetales.KCAL;
+    setQTotal(qTotal)
+    setKCALTotal(KCALTotal)
+  },[formValue])
   return (
     <CardContent>
       <Grid container spacing={7}>
@@ -273,6 +282,35 @@ const RegistroConsumoUsual = () => {
         {GetOptions(formValue.Magra)}
         {GetOptions(formValue.SemiMagra)}
         {GetOptions(formValue.AltaEnGrasa)}
+        <React.Fragment>
+        <Grid item xs={12} sm={2}>
+          <InputLabel id='demo-simple-select-label'>Total</InputLabel>
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <TextField
+            fullWidth
+            label='Q-Total'
+            value={qTotal}
+            id={`Total`}
+            placeholder={`0`}
+            defaultValue='0'            
+            type='number'
+            disabled={true}            
+          />
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <TextField
+            fullWidth
+            label='Kcal-Total'
+            value={KCALTotal}            
+            id={`Total`}
+            placeholder={`0`}
+            defaultValue='0'            
+            type='number'
+            disabled={true}            
+          />
+        </Grid>
+      </React.Fragment>
       </Grid>
       <Grid item xs={12} sm={12}>
         <hr></hr>

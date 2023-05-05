@@ -318,7 +318,9 @@ const ComparationResults = () => {
       {/* <Button onClick={ParserData} variant='contained' fullWidth>
         Cargar Datos
       </Button> */}
-      <FormControl>
+      <Grid item xs={12} sm={12}>
+
+      <FormControl style={{marginLeft:"5px",marginTop:"5px"}}>
         <FormLabel id='demo-row-radio-buttons-group-label'>Objetivo</FormLabel>
         <RadioGroup
           row
@@ -331,6 +333,7 @@ const ComparationResults = () => {
           <FormControlLabel value='Win' control={<Radio />} label='Aumento De Peso' />
         </RadioGroup>
       </FormControl>
+      </Grid>
       <TableContainer component={Paper}>
         <Table className={classes.table} stickyHeader sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
