@@ -34,8 +34,42 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const RegistroConsumoUsual = () => {
+  const state = useSelector((state: State) => state)
+  const [dateRegistroDieta,setDateRegistroDieta] = useState<Array<CalculoDeDieta>>([])
   const [qTotal,setQTotal] = useState(0)
   const [KCALTotal,setKCALTotal] = useState(0)
+  const InsertCall = useApi({
+    config: {
+      url: `${MAINURL}api/addConsumo`,
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const UpdateCall = useApi({
+    config: {
+      url: `${MAINURL}api/updateConsumo`,
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const DeleteCall = useApi({
+    config: {
+      url: `${MAINURL}api/deleteConsumo`,
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
+  const GetDateRegistrosCall = useApi({
+    config: {
+      url: `${MAINURL}api/getConsumo`,
+      method: 'POST'
+    },
+    shouldFire: false
+  })
+
   const [formValue, setFormValue] = useState<CalculoDeDieta>({
     _id: '',
     Fecha: new Date(),
@@ -254,22 +288,208 @@ const RegistroConsumoUsual = () => {
   }
   
   const Execute = () => {
-
+    if(formValue._id === ""){
+      InsertCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          ...formValue,
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      InsertCall.setFire(true)
+    }else {
+      UpdateCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          ...formValue,
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      UpdateCall.setFire(true)
+    }
   }
 
-  const Delete =() => {
-    
+  const Delete = () => {
+    DeleteCall.setParameters((info: any) => ({
+      ...info,
+      data: {
+        _id: formValue._id
+      }
+    }))
+    DeleteCall.setFire(true)
+    ResetForm()
+    NProgress.start()
   }
 
+  const ResetForm = () => {
+    setFormValue({_id: '',
+    Fecha: new Date(),
+    Usuario: '',
+    Frutas: {
+      ID: 'Frutas',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Frutas'
+    },
+    Vegetales: {
+      ID: 'Vegetales',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Vegetales'
+    },
+    Lacteos: {
+      ID: 'Lacteos',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Lácteos'
+    },
+    Descremada: {
+      ID: 'Descremada',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Descremada'
+    },
+    Semidescremada: {
+      ID: 'Semidescremada',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Semidescremada'
+    },
+    Entera: {
+      ID: 'Entera',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Entera'
+    },
+    Chos: {
+      ID: 'Chos',
+      KCAL: 0,
+      Q: 0,
+      LABEL: "CHO'S"
+    },
+    Harinas: {
+      ID: 'Harinas',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Harinas'
+    },
+    MuyMagra: {
+      ID: 'MuyMagra',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Muy magra'
+    },
+    Magra: {
+      ID: 'Magra',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Magra'
+    },
+    SemiMagra: {
+      ID: 'SemiMagra',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Semimagra'
+    },
+    AltaEnGrasa: {
+      ID: 'AltaEnGrasa',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Alta en Grasa'
+    },
+    Grasas: {
+      ID: 'Grasas',
+      KCAL: 0,
+      Q: 0,
+      LABEL: 'Grasas'
+    }})
+  }
+
+  const HandleChangeSelect = (e: any) => {
+    let result: any = null
+    if (typeof e.target.value === 'string' || e.target.value !== '') {
+      result = dateRegistroDieta.find(
+        row => new Date(row.Fecha).toLocaleDateString() === new Date(e.target.value).toLocaleDateString()
+      )
+    }
+
+    if (result) {
+      console.log(result)
+      setFormValue({ ...result, Fecha: new Date(result.Fecha) })
+    } else {
+      ResetForm()
+    }
+  }
   useEffect(() => {    
     const qTotal = formValue.AltaEnGrasa.Q+formValue.Chos.Q+formValue.Descremada.Q+formValue.Entera.Q+formValue.Frutas.Q+formValue.Grasas.Q+formValue.Harinas.Q+formValue.Lacteos.Q+formValue.Magra.Q+formValue.MuyMagra.Q+formValue.SemiMagra.Q+formValue.Semidescremada.Q+formValue.Vegetales.Q;
     const KCALTotal = formValue.AltaEnGrasa.KCAL+formValue.Chos.KCAL+formValue.Descremada.KCAL+formValue.Entera.KCAL+formValue.Frutas.KCAL+formValue.Grasas.KCAL+formValue.Harinas.KCAL+formValue.Lacteos.KCAL+formValue.Magra.KCAL+formValue.MuyMagra.KCAL+formValue.SemiMagra.KCAL+formValue.Semidescremada.KCAL+formValue.Vegetales.KCAL;
     setQTotal(qTotal)
     setKCALTotal(KCALTotal)
   },[formValue])
+
+  useEffect(() => {
+    if (state.ChangeOnUser !== '') {
+      console.log("Me ejecute")
+      GetDateRegistrosCall.setParameters((info: any) => ({
+        ...info,
+        data: {
+          Usuario: state.ChangeOnUser
+        }
+      }))
+      NProgress.start()
+      GetDateRegistrosCall.setFire(true)
+    }
+  }, [state.ChangeOnUser])
+
+  useEffect(() => {
+    if (GetDateRegistrosCall.dataReady) {      
+      if (GetDateRegistrosCall.data.length > 0) {
+        setDateRegistroDieta(GetDateRegistrosCall.data)
+      }
+    }
+    NProgress.done()
+  }, [GetDateRegistrosCall.isLoading])
+
+  useEffect(() => {
+    if (InsertCall.dataReady || UpdateCall.dataReady) {
+      cogoToast.success('Dato Registrado', { position: 'top-right' })
+      ResetForm()
+      GetDateRegistrosCall.setFire(true)
+    }
+    NProgress.done()
+  }, [InsertCall.isLoading, UpdateCall.isLoading])
+
+  useEffect(() => {
+    if (DeleteCall.dataReady) {
+      cogoToast.success('Dato Eliminado', { position: 'top-right' })
+      NProgress.done()
+      GetDateRegistrosCall.setFire(true)
+    }
+  }, [DeleteCall.isLoading])
+
   return (
     <CardContent>
       <Grid container spacing={7}>
+        <Grid item xs={12} sm={12}>
+          <FormControl fullWidth>
+            <InputLabel id='demo-simple-select-label'>Fecha</InputLabel>
+            <Select
+              onChange={e => HandleChangeSelect(e)}
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              label='Age'
+            >
+              <MenuItem value=''>&nbsp;&nbsp;</MenuItem>
+              {dateRegistroDieta.map(registro => (
+                <MenuItem value={new Date(registro.Fecha).toDateString()}>
+                  {new Date(registro.Fecha).toLocaleDateString('es-ES')}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         {GetOptions(formValue.Frutas)}
         {GetOptions(formValue.Vegetales)}
         {GetOptions(formValue.Lacteos)}
