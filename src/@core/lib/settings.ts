@@ -10,7 +10,7 @@ export const MONGODB_DB_Consumo="Consumo"
 let MAINURL:string = ""
 
 if(process.env.NODE_ENV === "development"){
-    MAINURL = "http://localhost:3000/"
+    MAINURL = "http://localhost:3001/"
 }else{
     MAINURL = "https://testing.samus.website/"
 }

@@ -40,6 +40,12 @@ const navigation = (): VerticalNavItemsType => {
       path: '/addUser',
       openInNewTab: false
     },
+    {
+      title: 'Fisioterapia',
+      icon: AccountPlusOutline,
+      path: '/Fisioterapia',
+      openInNewTab: false
+    }
     // {
     //   title: 'Login',
     //   icon: Login,

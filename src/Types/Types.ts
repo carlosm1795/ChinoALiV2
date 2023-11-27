@@ -137,3 +137,36 @@ export interface CalculoDeDieta{
     AltaEnGrasa:CalculoDietaType,
     Grasas:CalculoDietaType,
 }
+export interface Consulta {
+    MotivoConsulta:string,
+    FechaDeConsulta:Date,
+}
+
+export interface AntecedentesPatologicos {
+    Diabetes:boolean,
+		Alergias:boolean,
+		Cancer:boolean,
+		Accidentes:boolean,
+		Transfusiones:boolean,
+		Cardiopatias:boolean,	
+		Contracturas:boolean,	
+		HTA:boolean,
+		Cirugiras:boolean,
+		Fracturas:boolean,
+}
+export interface PacienteFisioterapia {
+    _id:string,
+    Nombre:string,
+	Domicilio:string,
+	FechaNacimiento:Date,
+	Sexo:string,
+	Cedula:string,
+	ExploracionFisica:{
+		Peso:string
+		Estatura:string
+    },
+    Consultas:Array<Consulta>,
+    AntecedentesPatologicos:AntecedentesPatologicos,
+
+	
+}
