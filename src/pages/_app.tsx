@@ -11,6 +11,7 @@ import type { AppProps } from 'next/app'
 // ** Loader Import
 import NProgress from 'nprogress'
 
+
 // ** Emotion Imports
 import { CacheProvider } from '@emotion/react'
 import type { EmotionCache } from '@emotion/cache'
@@ -33,6 +34,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -63,6 +67,8 @@ const App = (props: ExtendedAppProps) => {
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    
     <Provider store={store}>
     <CacheProvider value={emotionCache}>
       <Head>
@@ -74,7 +80,7 @@ const App = (props: ExtendedAppProps) => {
         <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
-
+     
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
@@ -84,6 +90,7 @@ const App = (props: ExtendedAppProps) => {
       </SettingsProvider>
     </CacheProvider>
     </Provider>
+    </LocalizationProvider>
   )
 }
 

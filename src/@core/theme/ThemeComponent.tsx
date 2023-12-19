@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
 import GlobalStyles from '@mui/material/GlobalStyles'
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
-
+import { ReactNotifications} from 'react-notifications-component'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 
@@ -21,6 +21,7 @@ import themeOptions from './ThemeOptions'
 
 // ** Global Styles
 import GlobalStyling from './globalStyles'
+import 'react-notifications-component/dist/theme.css'
 
 interface Props {
   settings: Settings
@@ -52,6 +53,7 @@ const ThemeComponent = (props: Props) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalStyles styles={() => GlobalStyling(theme) as any} />
+      <ReactNotifications />
       {children}
     </ThemeProvider>
   )

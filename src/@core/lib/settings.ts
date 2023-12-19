@@ -6,11 +6,12 @@ export const MONGODB_DB_EvaluacionClinica="EvaluacionClinica"
 export const MONGODB_DB_Comidas="Comidas"
 export const MONGODB_DB_Dieta="Dieta"
 export const MONGODB_DB_Consumo="Consumo"
+export const MONGODB_DB_PacientesFisioTerapia="PacientesFisioterapia"
 
 let MAINURL:string = ""
 
 if(process.env.NODE_ENV === "development"){
-    MAINURL = "http://localhost:3001/"
+    MAINURL = "http://localhost:3000/"
 }else{
     MAINURL = "https://testing.samus.website/"
 }

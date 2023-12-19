@@ -137,22 +137,45 @@ export interface CalculoDeDieta{
     AltaEnGrasa:CalculoDietaType,
     Grasas:CalculoDietaType,
 }
+
+export interface Procedimientos {
+    Procedimiento:string
+}
 export interface Consulta {
     MotivoConsulta:string,
-    FechaDeConsulta:Date,
+    FechaDeConsulta?:string,    
 }
-
+export interface AntecedentesNoPatologicos {
+    Alcohol:string,
+    Tabaquismo:string,
+    Drogas:string,
+    Otros:string
+}
 export interface AntecedentesPatologicos {
-    Diabetes:boolean,
-		Alergias:boolean,
-		Cancer:boolean,
+        Alergias:boolean,
+        Asma:boolean,
+        Artrosis:boolean,
+        Artritis:boolean,
 		Accidentes:boolean,
-		Transfusiones:boolean,
+        AVC:boolean,
+		Cancer:boolean,
 		Cardiopatias:boolean,	
 		Contracturas:boolean,	
-		HTA:boolean,
 		Cirugiras:boolean,
+        Diabetes:boolean,
+        Escoliosis:boolean,
+        Encames:boolean,
+        Flebitis:boolean,
 		Fracturas:boolean,
+        Gota:boolean,
+		HTA:boolean,
+        OtrasMusculoEsq:string,
+        OtrasVasculares:string,
+		Transfusiones:boolean,
+        Trombos:boolean,
+}
+export interface DatosParaTable {
+    Consutas:Array<Consulta>
 }
 export interface PacienteFisioterapia {
     _id:string,
@@ -167,6 +190,6 @@ export interface PacienteFisioterapia {
     },
     Consultas:Array<Consulta>,
     AntecedentesPatologicos:AntecedentesPatologicos,
-
-	
+    AntecedentesNoPatolicos:AntecedentesNoPatologicos,
+    TratamientoFarmacologico:string,	
 }
