@@ -13,7 +13,7 @@ let MAINURL:string = ""
 if(process.env.NODE_ENV === "development"){
     MAINURL = "http://localhost:3000/"
 }else{
-    MAINURL = "https://testing.samus.website/"
+    MAINURL = "https://testing.grootprojects.com/"
 }
 
 export  default MAINURL
