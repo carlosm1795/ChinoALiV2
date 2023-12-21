@@ -43,6 +43,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const index = () => {
+    const [loading,setloading] = useState(false);
     const [pendingChanges, setPendingChanges] = useState(false);
     const columns = useMemo<MRT_ColumnDef<Consulta>[]>(
         //column definitions...
@@ -179,11 +180,19 @@ const index = () => {
         CreateNewUserCall.setParameters((state) => ({
             ...state,
             data: { ...datosPaciente },
-        }));
-        NProgress.start();
+        }));        
         CreateNewUserCall.setFire(true);
         handleClose();
+
+        
     }
+
+    useEffect(() => {
+        if(CreateNewUserCall.dataReady){
+            setloading(true);
+            GetPacientes.setFire(true);
+        }
+    },[CreateNewUserCall.isLoading])
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -274,7 +283,7 @@ const index = () => {
                 setPacientes(GetPacientes.data)
             }
         }
-        NProgress.done()
+        setloading(false);
     }, [GetPacientes.isLoading])
 
     useEffect(() => {
@@ -305,10 +314,18 @@ const index = () => {
         }))
         UpdatePaciente.setFire(true);
     }
+
+    const OpenModal = () => {
+        setDatosPaciente((state) => ({
+            ...state,
+            FechaNacimiento:new Date()
+        }))
+        handleClickOpen();
+    }
     return (
         <DatePickerWrapper>
             {
-                !GetPacientes.dataReady ? <FadeLoader
+                !GetPacientes.dataReady || loading ? <FadeLoader
                     color={"#049eaf"}
                     loading={true}
                     cssOverride={{
@@ -348,7 +365,7 @@ const index = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <ButtonGroup fullWidth>
-                                <Button fullWidth sx={{ mr: 2 }} variant='contained' onClick={handleClickOpen}>
+                                <Button fullWidth sx={{ mr: 2 }} variant='contained' onClick={OpenModal}>
                                     Registrar Nuevo Paciente
                                 </Button>
                                 <Button fullWidth sx={{ mr: 2 }} variant='contained' onClick={UpdateData} disabled={!pendingChanges}>
@@ -367,10 +384,10 @@ const index = () => {
                                 <Typography variant="h6" style={{
                                     flex: 1,
                                 }}>
-                                    Sound
+                                    Datos del Cliente
                                 </Typography>
-                                <Button autoFocus color="inherit" onClick={InsertNewUser}>
-                                    save
+                                <Button autoFocus color="inherit" onClick={InsertNewUser} disabled={datosPaciente.Nombre.length === 0}>
+                                    Registrar
                                 </Button>
                             </Toolbar>
                         </AppBar>
@@ -379,7 +396,7 @@ const index = () => {
                                 <Grid item xs={12}>
                                     <TextField
                                         id="Nombre"
-                                        label="Nombre"
+                                        label="Nombre *"
                                         variant="outlined"
                                         fullWidth
                                         value={datosPaciente.Nombre}
