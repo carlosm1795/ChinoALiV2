@@ -9,7 +9,7 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 // ** Loader Import
 import NProgress from 'nprogress'
 import { Store } from 'react-notifications-component';
-import {ClipLoader,FadeLoader} from "react-spinners";
+import { ClipLoader, FadeLoader } from "react-spinners";
 // ** Demo Components Imports
 import CloseIcon from 'mdi-material-ui/Close';
 import DatePicker from 'react-datepicker'
@@ -43,7 +43,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const index = () => {
-    const [loading,setloading] = useState(false);
+    const [loading, setloading] = useState(false);
     const [pendingChanges, setPendingChanges] = useState(false);
     const columns = useMemo<MRT_ColumnDef<Consulta>[]>(
         //column definitions...
@@ -180,19 +180,19 @@ const index = () => {
         CreateNewUserCall.setParameters((state) => ({
             ...state,
             data: { ...datosPaciente },
-        }));        
+        }));
         CreateNewUserCall.setFire(true);
         handleClose();
 
-        
+
     }
 
     useEffect(() => {
-        if(CreateNewUserCall.dataReady){
+        if (CreateNewUserCall.dataReady) {
             setloading(true);
             GetPacientes.setFire(true);
         }
-    },[CreateNewUserCall.isLoading])
+    }, [CreateNewUserCall.isLoading])
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -318,7 +318,47 @@ const index = () => {
     const OpenModal = () => {
         setDatosPaciente((state) => ({
             ...state,
-            FechaNacimiento:new Date()
+            _id: "",
+            Nombre: "",
+            Domicilio: "",
+            FechaNacimiento: new Date(),
+            Sexo: "",
+            Cedula: "",
+            ExploracionFisica: {
+                Peso: "",
+                Estatura: ""
+            },
+            Consultas: [],
+            AntecedentesPatologicos: {
+                Alergias: false,
+                Asma: false,
+                Artrosis: false,
+                Artritis: false,
+                Accidentes: false,
+                AVC: false,
+                Cancer: false,
+                Cardiopatias: false,
+                Contracturas: false,
+                Cirugiras: false,
+                Diabetes: false,
+                Escoliosis: false,
+                Encames: false,
+                Flebitis: false,
+                Fracturas: false,
+                Gota: false,
+                HTA: false,
+                OtrasMusculoEsq: "",
+                OtrasVasculares: "",
+                Transfusiones: false,
+                Trombos: false,
+            },
+            AntecedentesNoPatolicos: {
+                Alcohol: "",
+                Drogas: "",
+                Tabaquismo: "",
+                Otros: ""
+            },
+            TratamientoFarmacologico: ""
         }))
         handleClickOpen();
     }
@@ -333,7 +373,7 @@ const index = () => {
                         margin: "0 auto",
                         borderColor: "#049eaf",
                     }}
-                    title='Cargando'                    
+                    title='Cargando'
                     aria-label="Loading Spinner"
                     data-testid="loader"
                 /> : <>
