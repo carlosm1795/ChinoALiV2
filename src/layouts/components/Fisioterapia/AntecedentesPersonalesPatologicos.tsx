@@ -140,7 +140,7 @@ const AntecedentesPersonalesPatologicos = ({ antecedentes, sourceData, updateDat
                         unmountOnExit>
                         <CardContent>
                             <Container sx={{
-                                height: 150,
+                                height: 350,
                                 lineHeight: 2
                             }}>
                                 <FormGroup row>
