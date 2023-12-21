@@ -139,241 +139,242 @@ const AntecedentesPersonalesPatologicos = ({ antecedentes, sourceData, updateDat
                     <Collapse in={open} timeout="auto"
                         unmountOnExit>
                         <CardContent>
-                            <Container sx={{
-                                height: 350,
-                                lineHeight: 2
-                            }}>
-                                <FormGroup row>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Alergias}
-                                                name="Alergias"
-                                                id="Alergias"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Alergias"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Asma}
-                                                name="Asma"
-                                                id="Asma"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Asma"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Artrosis}
-                                                name="Artrosis"
-                                                id="Artrosis"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Artrosis"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Artritis}
-                                                name="Artritis"
-                                                id="Artritis"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Artritis"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Accidentes}
-                                                name="Accidentes"
-                                                id="Accidentes"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Accidentes"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.AVC}
-                                                name="AVC"
-                                                id="AVC"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="AVC"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Cancer}
-                                                name="Cancer"
-                                                id="Cancer"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Cancer"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Cardiopatias}
-                                                name="Cardiopatias"
-                                                id="Cardiopatias"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Cardiopatias"
-                                    />
+                            <Grid container spacing={2}>
 
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Contracturas}
-                                                name="Contracturas"
-                                                id="Contracturas"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Contracturas"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Cirugiras}
-                                                name="Cirugiras"
-                                                id="Cirugiras"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Cirugiras"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Diabetes}
-                                                name="Diabetes"
-                                                id="Diabetes"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Diabetes"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Escoliosis}
-                                                name="Escoliosis"
-                                                id="Escoliosis"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Escoliosis"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Encames}
-                                                name="Encames"
-                                                id="Encames"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Encames"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Flebitis}
-                                                name="Flebitis"
-                                                id="Flebitis"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Flebitis"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Fracturas}
-                                                name="Fracturas"
-                                                id="Fracturas"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Fracturas"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Gota}
-                                                name="Gota"
-                                                id="Gota"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Gota"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.HTA}
-                                                name="HTA"
-                                                id="HTA"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="HTA"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Transfusiones}
-                                                name="Transfusiones"
-                                                id="Transfusiones"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Transfusiones"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={datos.Trombos}
-                                                name="Trombos"
-                                                id="Trombos"
-                                                onChange={(e, value) => HandleChangeCheck(e, value)}
-                                            />}
-                                        label="Trombos"
-                                    />
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={6}>
+                                <Grid item xs={12}>
 
-                                            <TextField
-                                                id="OtrasMusculoEsq"
-                                                label="Otras Enf Musculo esq"
-                                                variant="outlined"
-                                                fullWidth
-                                                value={datos.OtrasMusculoEsq}
-                                                onChange={(e) => {
-                                                    setDatos((state) => ({
-                                                        ...state,
-                                                        OtrasMusculoEsq: e.target.value
-                                                    }))
-                                                }}
-                                            />
+                                    <FormGroup row>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Alergias}
+                                                    name="Alergias"
+                                                    id="Alergias"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Alergias"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Asma}
+                                                    name="Asma"
+                                                    id="Asma"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Asma"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Artrosis}
+                                                    name="Artrosis"
+                                                    id="Artrosis"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Artrosis"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Artritis}
+                                                    name="Artritis"
+                                                    id="Artritis"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Artritis"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Accidentes}
+                                                    name="Accidentes"
+                                                    id="Accidentes"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Accidentes"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.AVC}
+                                                    name="AVC"
+                                                    id="AVC"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="AVC"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Cancer}
+                                                    name="Cancer"
+                                                    id="Cancer"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Cancer"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Cardiopatias}
+                                                    name="Cardiopatias"
+                                                    id="Cardiopatias"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Cardiopatias"
+                                        />
+
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Contracturas}
+                                                    name="Contracturas"
+                                                    id="Contracturas"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Contracturas"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Cirugiras}
+                                                    name="Cirugiras"
+                                                    id="Cirugiras"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Cirugiras"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Diabetes}
+                                                    name="Diabetes"
+                                                    id="Diabetes"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Diabetes"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Escoliosis}
+                                                    name="Escoliosis"
+                                                    id="Escoliosis"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Escoliosis"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Encames}
+                                                    name="Encames"
+                                                    id="Encames"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Encames"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Flebitis}
+                                                    name="Flebitis"
+                                                    id="Flebitis"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Flebitis"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Fracturas}
+                                                    name="Fracturas"
+                                                    id="Fracturas"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Fracturas"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Gota}
+                                                    name="Gota"
+                                                    id="Gota"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Gota"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.HTA}
+                                                    name="HTA"
+                                                    id="HTA"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="HTA"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Transfusiones}
+                                                    name="Transfusiones"
+                                                    id="Transfusiones"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Transfusiones"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={datos.Trombos}
+                                                    name="Trombos"
+                                                    id="Trombos"
+                                                    onChange={(e, value) => HandleChangeCheck(e, value)}
+                                                />}
+                                            label="Trombos"
+                                        />
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+
+                                                <TextField
+                                                    id="OtrasMusculoEsq"
+                                                    label="Otras Enf Musculo esq"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    value={datos.OtrasMusculoEsq}
+                                                    onChange={(e) => {
+                                                        setDatos((state) => ({
+                                                            ...state,
+                                                            OtrasMusculoEsq: e.target.value
+                                                        }))
+                                                    }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6}>
+
+                                                <TextField
+                                                    id="OtrasVasculares"
+                                                    label="Otras Enf Vasculares"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    value={datos.OtrasVasculares}
+                                                    onChange={(e) => {
+                                                        setDatos((state) => ({
+                                                            ...state,
+                                                            OtrasVasculares: e.target.value
+                                                        }))
+                                                    }}
+                                                />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={6}>
-
-                                            <TextField
-                                                id="OtrasVasculares"
-                                                label="Otras Enf Vasculares"
-                                                variant="outlined"
-                                                fullWidth
-                                                value={datos.OtrasVasculares}
-                                                onChange={(e) => {
-                                                    setDatos((state) => ({
-                                                        ...state,
-                                                        OtrasVasculares: e.target.value
-                                                    }))
-                                                }}
-                                            />
-                                        </Grid>
-                                    </Grid>
 
 
 
-                                </FormGroup>
-                            </Container>
+                                    </FormGroup>
+                                </Grid>
+                            </Grid>
                         </CardContent>
                     </Collapse>
                 </div>
